@@ -1,0 +1,23 @@
+.left_sidebar {
+  width: 50%;
+  height: 100vh;
+  border-right: 1px solid #ddd;
+  float: right;
+}
+.left_app_title p {
+  font-size: 30px;
+  margin-bottom: 0;
+}
+.right_sidebar {
+  padding: 10px;
+  width: 50%;
+  height: 100vh;
+  border-left: 1px solid #ddd;
+}
+.login_wrap {
+  width: 50%;
+  margin: 0 auto;
+}
+.login_wrap h1 {
+  margin-left: 33%;
+}
