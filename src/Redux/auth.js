@@ -13,6 +13,10 @@ export const Auth = (state = {
             return {...state, isAuthenticated: true, token: action.token, errMessage: ''};
         case ActionTypes.LOGIN_FAILED:
             return {...state, isAuthenticated: false, errMessage: action.message};
+        case ActionTypes.LOGOUT_REQUEST:
+            return {...state, isAuthenticated: true};
+        case ActionTypes.LOGOUT_SUCCESS:
+            return {...state, isAuthenticated: false, token: '', user: null};
         default:
             return state;
     }

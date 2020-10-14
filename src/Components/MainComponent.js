@@ -25,6 +25,9 @@ const data = [
 ];
 
 function Main(props) {
+  const logoutHandler = () => {
+    props.logoutUser();
+  };
   return (
     <div>
       <Row>
@@ -43,7 +46,11 @@ function Main(props) {
               <Menu.Item key="3" icon={<MessageOutlined />}>
                 Chats
               </Menu.Item>
-              <Menu.Item key="4" icon={<LogoutOutlined />}>
+              <Menu.Item
+                onClick={logoutHandler}
+                key="4"
+                icon={<LogoutOutlined />}
+              >
                 Logout
               </Menu.Item>
             </Menu>
@@ -67,7 +74,7 @@ function Main(props) {
                       avatar={
                         <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                       }
-                      title={<a href="/">{item.title}</a>}                      
+                      title={<a href="/">{item.title}</a>}
                     />
                   </List.Item>
                 )}

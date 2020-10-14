@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Login from './LoginPage';
 import Main from './MainComponent';
 import { connect } from 'react-redux';
-import { loginUser } from '../Redux/ActionCreators';
+import { loginUser, logoutUser } from '../Redux/ActionCreators';
 
 const mapStateToProps = (state) => {
   return {
@@ -12,6 +12,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   loginUser: (creds) => dispatch(loginUser(creds)),
+  logoutUser: () => dispatch(logoutUser()),
 });
 
 class Home extends Component {
@@ -43,9 +44,14 @@ class Home extends Component {
             path="/login"
             component={() => <Login loginUser={this.props.loginUser} />}
           />
-          <PrivateRoute exact path="/" component={() => <Main />} />
+          <PrivateRoute
+            exact
+            path="/"
+            component={() => <Main logoutUser={this.props.logoutUser} />}
+          />
           <Redirect to="/" />
         </Switch>
+        {this.props.auth.isAuthenticated ? <Redirect to="/" /> : ''}
       </div>
     );
   }

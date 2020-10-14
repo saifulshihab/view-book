@@ -2,7 +2,6 @@ import * as ActionType from './ActionTypes';
 import { baseURL } from '../shared/baseURL';
 
 //Login User
-
 export const requestLogin = (creds) => {
   return {
     type: ActionType.LOGIN_REQUEST,
@@ -62,4 +61,23 @@ export const loginUser = (creds) => (dispatch) => {
     .catch((error) => {
       dispatch(loginFailed(error.message));
     });
+};
+
+// Logout user
+export const requestLogout = () => {
+  return {
+    type: ActionType.LOGOUT_REQUEST,
+  };
+};
+export const logoutSuccess = () => {
+  return {
+    type: ActionType.LOGOUT_SUCCESS,
+  };
+};
+
+export const logoutUser = () => (dispatch) => {
+  dispatch(requestLogout());
+  localStorage.removeItem('vbtoken');
+  localStorage.removeItem('creds');
+  dispatch(logoutSuccess());
 };
