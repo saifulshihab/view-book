@@ -16,7 +16,7 @@ export const Auth = (state = {
         case ActionTypes.LOGOUT_REQUEST:
             return {...state, isAuthenticated: true};
         case ActionTypes.LOGOUT_SUCCESS:
-            return {...state, isAuthenticated: false, token: '', user: null};
+            return {...state, isAuthenticated: false, token: '', user: null, errMessage: null};
         default:
             return state;
     }

@@ -42,7 +42,7 @@ class Home extends Component {
           <Route
             exact
             path="/login"
-            component={() => <Login loginUser={this.props.loginUser} />}
+            component={() => <Login errMess={this.props.auth.errMessage} loginUser={this.props.loginUser} />}
           />
           <PrivateRoute
             exact

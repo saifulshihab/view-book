@@ -19,5 +19,21 @@
   margin: 0 auto;
 }
 .login_wrap h1 {
-  margin-left: 33%;
+  margin-left: 34.2%;
+}
+.login-form {
+  max-width: 300px;
+  margin: 0 auto !important;
+  border: 1px solid #ddd;
+  padding: 10px !important;
+  border-radius: 5px;
+}
+.login-form-forgot {
+  float: right;
+}
+.ant-col-rtl .login-form-forgot {
+  float: left;
+}
+.login-form-button {
+  width: 100%;
 }

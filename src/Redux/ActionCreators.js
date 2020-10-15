@@ -36,7 +36,12 @@ export const loginUser = (creds) => (dispatch) => {
         if (res.ok) {
           return res;
         } else {
-          const error = new Error(res.status + ': ' + res.statusText);
+          let error;
+          if (res.status === 401) {
+            error = new Error('Invalid username or password!!');
+          } else {
+            error = new Error(res.status + ': ' + res.statusText);
+          }
           error.response = res;
           throw error;
         }
@@ -50,7 +55,7 @@ export const loginUser = (creds) => (dispatch) => {
       if (res.success) {
         //if response is all ok with creds
         localStorage.setItem('vbtoken', res.token);
-        localStorage.setItem('creds', JSON.stringify(creds));
+        // localStorage.setItem('creds', JSON.stringify(creds));
         dispatch(loginSuccess(res));
       } else {
         const error = new Error(res.status);
