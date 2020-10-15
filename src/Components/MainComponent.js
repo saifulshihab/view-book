@@ -1,10 +1,11 @@
 import React from 'react';
-import { Row, Col, Menu, Input, List, Avatar } from 'antd';
+import { Row, Col, Menu, Input, List, Avatar, Button } from 'antd';
 import {
   MessageOutlined,
   HomeOutlined,
   LogoutOutlined,
   UnorderedListOutlined,
+  ToolOutlined,
 } from '@ant-design/icons';
 
 const { Search } = Input;
@@ -43,12 +44,15 @@ function Main(props) {
               <Menu.Item key="2" icon={<UnorderedListOutlined />}>
                 Profile
               </Menu.Item>
-              <Menu.Item key="3" icon={<MessageOutlined />}>
+              <Menu.Item key="3" icon={<ToolOutlined />}>
+                Settings
+              </Menu.Item>
+              <Menu.Item key="4" icon={<MessageOutlined />}>
                 Chats
               </Menu.Item>
               <Menu.Item
                 onClick={logoutHandler}
-                key="4"
+                key="5"
                 icon={<LogoutOutlined />}
               >
                 Logout
@@ -59,6 +63,12 @@ function Main(props) {
         <Col span={10}> </Col>
         <Col span={7}>
           <div className="right_sidebar">
+            <div className="profile__btn">
+              <img src="/" alt={''} />
+              <div className="fullname">
+                <Button type="link">Saiful Islam Shihab</Button>
+              </div>
+            </div>
             <Search
               placeholder="input search text"
               onSearch={(value) => console.log(value)}

@@ -86,3 +86,60 @@ export const logoutUser = () => (dispatch) => {
   localStorage.removeItem('creds');
   dispatch(logoutSuccess());
 };
+
+// User Signup
+
+export const signupSuccess = (message) => {
+  return {
+    type: ActionType.SIGNUP_SUCCESS,
+    message,
+  };
+};
+export const signupFailed = (message) => {
+  return {
+    type: ActionType.SIGNUP_FAILED,
+    message,
+  };
+};
+
+export const signupUser = (values) => (dispatch) => {
+  return fetch(baseURL + 'users/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(values),
+  })
+    .then(
+      (res) => {
+        if (res.ok) {
+          return res;
+        } else {
+          let error;
+          if (res.status === 500) {
+            error = new Error('Username already exist!');
+          } else {
+            error = new Error(res.status + ': ' + res.statusText);
+          }
+          error.response = res;
+          throw error;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.success) {
+        dispatch(signupSuccess(res.status));
+      } else {
+        const error = new Error(res.status);
+        error.response = res;
+        throw error;
+      }
+    })
+    .catch((err) => {
+      dispatch(signupFailed(err.message));
+    });
+};
