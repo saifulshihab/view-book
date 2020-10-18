@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, createContext } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Login from './LoginPage';
 import Signup from './SignupPage';
-import Main from './MainComponent';
+import NewsFeed from './NewsFeed';
 import { connect } from 'react-redux';
 import { loginUser, logoutUser, signupUser } from '../Redux/ActionCreators';
+export const UserContext = createContext(null);
 
 const mapStateToProps = (state) => {
   return {
@@ -13,14 +14,15 @@ const mapStateToProps = (state) => {
   };
 };
 const mapDispatchToProps = (dispatch) => ({
-  loginUser: (creds) => dispatch(loginUser(creds)),
+  loginUser: (creds, cb) => {
+    dispatch(loginUser(creds));
+    setTimeout(() => cb(), 0);
+  },
   logoutUser: () => dispatch(logoutUser()),
   signupUser: (values) => dispatch(signupUser(values)),
 });
 
-class Home extends Component {
-  componentDidMount() {}
-
+class Main extends Component {
   render() {
     const PrivateRoute = ({ component: Component, ...rest }) => (
       <Route
@@ -39,6 +41,7 @@ class Home extends Component {
         }
       />
     );
+
     return (
       <div>
         <Switch>
@@ -46,16 +49,23 @@ class Home extends Component {
             exact
             path="/login"
             component={() => (
-              <Login
-                errMess={this.props.auth.errMessage}
-                loginUser={this.props.loginUser}
-              />
+              <UserContext.Provider value={this.props.auth}>
+                <Login
+                  errMess={this.props.auth.errMessage}
+                  loginUser={this.props.loginUser}
+                  isLoading={this.props.auth.isLoading}
+                />
+              </UserContext.Provider>
             )}
           />
           <PrivateRoute
             exact
-            path="/"
-            component={() => <Main logoutUser={this.props.logoutUser} />}
+            path="/home"
+            component={() => (
+              <UserContext.Provider value={this.props.auth}>
+                <NewsFeed logoutUser={this.props.logoutUser} />
+              </UserContext.Provider>
+            )}
           />
           <Route
             exact
@@ -68,12 +78,17 @@ class Home extends Component {
               />
             )}
           />
-          <Redirect to="/" />
         </Switch>
-        {this.props.auth.isAuthenticated ? <Redirect to="/" /> : ''}
+        {this.props.auth.isAuthenticated ? (
+          <UserContext.Provider value={this.props.auth}>
+            <NewsFeed logoutUser={this.props.logoutUser} />
+          </UserContext.Provider>
+        ) : (
+          <Redirect to="/login" />
+        )}
       </div>
     );
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

@@ -2,16 +2,17 @@ import * as ActionType from './ActionTypes';
 import { baseURL } from '../shared/baseURL';
 
 //Login User
-export const requestLogin = (creds) => {
-  return {
-    type: ActionType.LOGIN_REQUEST,
-    creds,
-  };
-};
+// export const requestLogin = (creds) => {
+//   return {
+//     type: ActionType.LOGIN_REQUEST,
+//     creds,
+//   };
+// };
 export const loginSuccess = (res) => {
   return {
     type: ActionType.LOGIN_SUCCESS,
     token: res.token,
+    username: res.username,
   };
 };
 export const loginFailed = (message) => {
@@ -22,7 +23,6 @@ export const loginFailed = (message) => {
 };
 export const loginUser = (creds) => (dispatch) => {
   //dispatch requestLogin to kickoff the call to the API
-  dispatch(requestLogin(creds));
 
   return fetch(baseURL + 'users/login', {
     method: 'POST',
@@ -38,7 +38,7 @@ export const loginUser = (creds) => (dispatch) => {
         } else {
           let error;
           if (res.status === 401) {
-            error = new Error('Invalid username or password!!');
+            error = new Error('Invalid username or password!');
           } else {
             error = new Error(res.status + ': ' + res.statusText);
           }
@@ -55,6 +55,7 @@ export const loginUser = (creds) => (dispatch) => {
       if (res.success) {
         //if response is all ok with creds
         localStorage.setItem('vbtoken', res.token);
+        localStorage.setItem('un', res.username);
         // localStorage.setItem('creds', JSON.stringify(creds));
         dispatch(loginSuccess(res));
       } else {
@@ -84,6 +85,7 @@ export const logoutUser = () => (dispatch) => {
   dispatch(requestLogout());
   localStorage.removeItem('vbtoken');
   localStorage.removeItem('creds');
+  localStorage.removeItem('un');
   dispatch(logoutSuccess());
 };
 

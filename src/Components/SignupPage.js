@@ -86,27 +86,35 @@ function Signup(props) {
                 htmlType="submit"
                 className="login-form-button"
               >
-                Signup
+                Sign up
               </Button>
 
               <div style={{ textAlign: 'center', marginTop: 5 }}>
                 <Tooltip title="Signup with Google">
-                  <Button style={{marginRight: 5, color: '#40a9ff'}}  shape="circle" icon={<FacebookFilled />} />
+                  <Button
+                    style={{ marginRight: 5, color: '#40a9ff' }}
+                    shape="circle"
+                    icon={<FacebookFilled />}
+                  />
                 </Tooltip>
-                <Tooltip  title="Signup with Facebook">
-                  <Button style={{color: 'red'}} shape="circle" icon={<GoogleOutlined />} />
+                <Tooltip title="Signup with Facebook">
+                  <Button
+                    style={{ color: 'red' }}
+                    shape="circle"
+                    icon={<GoogleOutlined />}
+                  />
                 </Tooltip>
               </div>
-            </Form.Item>    
-              <Link to="/login">
-                <Button type="link">Login now!</Button>
-              </Link>           
+            </Form.Item>
+            <Link to="/login">
+              <Button type="link">Login now!</Button>
+            </Link>
             {props.signupError !== null ? (
               <Alert message={props.signupError} type="error" showIcon />
-            ) : props.signupSuccess !== null ? (
-              <Alert message={props.signupSuccess} type="success" showIcon />
             ) : (
-              <></>
+              props.signupSuccess !== null && (
+                <Alert message={props.signupSuccess} type="success" showIcon />
+              )
             )}
           </Form>
         </div>

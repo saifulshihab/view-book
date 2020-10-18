@@ -1,14 +1,25 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox, Alert } from 'antd';
+import { Form, Input, Button, Checkbox, Alert, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
 function Login(props) {
+  let history = useHistory();
+  let location = useLocation();
+
+  let { from } = location.state || { from: { pathname: '/' } };
   const onFinish = (values) => {
-    props.loginUser({
-      username: values.username,
-      password: values.password,
-    });
+    props.loginUser(
+      {
+        username: values.username,
+        password: values.password,
+      },
+      () => {
+        setTimeout(() => {
+          history.replace(from);
+        }, 1000);
+      }
+    );
   };
 
   return (
@@ -76,10 +87,9 @@ function Login(props) {
               <Button type="link">Register now!</Button>
             </Link>
           </Form.Item>
-          {props.errMess !== null ? (
+          {props.isLoading && <Spin size="small" />}
+          {props.errMess !== null && (
             <Alert message={props.errMess} type="error" showIcon />
-          ) : (
-            <></>
           )}
         </Form>
       </div>
