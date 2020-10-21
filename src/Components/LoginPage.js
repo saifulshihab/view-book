@@ -1,25 +1,18 @@
 import React from 'react';
 import { Form, Input, Button, Checkbox, Alert, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 function Login(props) {
-  let history = useHistory();
   let location = useLocation();
 
   let { from } = location.state || { from: { pathname: '/' } };
+  console.log(from);
   const onFinish = (values) => {
-    props.loginUser(
-      {
-        username: values.username,
-        password: values.password,
-      },
-      () => {
-        setTimeout(() => {
-          history.replace(from);
-        }, 1000);
-      }
-    );
+    props.loginUser({
+      username: values.username,
+      password: values.password,
+    });
   };
 
   return (

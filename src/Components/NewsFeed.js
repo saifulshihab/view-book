@@ -1,158 +1,109 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Switch, Route, withRouter, Link, Redirect } from 'react-router-dom';
-import { Row, Col, Menu, Input, List, Avatar, Button } from 'antd';
+import React, { useState } from 'react';
+import { Button, Card, Col, Input, Row } from 'antd';
 import {
-  MessageOutlined,
-  HomeOutlined,
-  LogoutOutlined,
-  UnorderedListOutlined,
-  ToolOutlined,
+  CommentOutlined,
+  FileImageOutlined,
+  FolderAddOutlined,
+  GifOutlined,
+  LikeFilled,
+  LikeOutlined,
+  ShareAltOutlined,
 } from '@ant-design/icons';
-import { UserContext } from './Main';
-import Profile from './Profile';
-
-const { Search } = Input;
-
-const data = [
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-];
-
-function NewsFeed(props) {
-  const [userdata, setUserdata] = useState({});
-  const user = useContext(UserContext);
-
-  useEffect(() => {
-    fetch(`http://localhost:5000/users/${user.username}`)
-      .then((res) => {
-        if (res.ok) {
-          return res;
-        } else {
-          const error = new Error(res.status + res.statusText);
-          error.response = res;
-          throw error;
-        }
-      }, err => {throw(err)})
-      .then((res) => res.json())
-      .then(res => {
-        setUserdata(res.user);
-      })
-      .catch(err => console.log(err));
-  }, []);
-
-  const logoutHandler = () => {
-    props.logoutUser();
-  };
-  const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route
-      {...rest}
-      render={(props) =>
-        user.isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: props.location },
-            }}
-          />
-        )
-      }
-    />
-  );
+import Avatar from 'antd/lib/avatar/avatar';
+const { Meta } = Card;
+const NewsFeed = () => {
+  const [liked, setLiked] = useState(false);
   return (
-    <div>
-      <Row>
-        <Col span={7}>
-          <div className="left_sidebar">
-            <div className="left_app_title">
-              <p>Viewbook</p>
-            </div>
-            <Menu defaultSelectedKeys={['1']} mode="inline">
-              <Menu.Item key="1" icon={<HomeOutlined />}>
-                Home
-              </Menu.Item>
-
-              <Menu.Item key="2" icon={<UnorderedListOutlined />}>
-                Profile
-              </Menu.Item>
-
-              <Menu.Item key="3" icon={<ToolOutlined />}>
-                Settings
-              </Menu.Item>
-              <Menu.Item key="4" icon={<MessageOutlined />}>
-                Chats
-              </Menu.Item>
-              <Menu.Item
-                onClick={logoutHandler}
-                key="5"
-                icon={<LogoutOutlined />}
-              >
-                Logout
-              </Menu.Item>
-            </Menu>
-          </div>
-        </Col>
-        <Col span={10}>
-          <div className="apps_logo">
-            <Link to="/">
-              <img src="/logo.png" />
-            </Link>
-          </div>
-          <Switch>
-            <PrivateRoute
-              exact
-              path="/profile"
-              component={() => <Profile user={userdata} />}
+    <div className="newsfeed">
+      <Card bordered={true} style={{ width: '100%' }}>
+        <Row>
+          <Col span={24}>
+            <Input
+              size="large"
+              placeholder="Whats on your mind?"
+              style={{ width: '100%', borderRadius: '40px' }}
             />
-          </Switch>
-        </Col>
-        <Col span={7}>
-          <div className="right_sidebar">
-            <div className="profile__btn">
-              <img src="/" alt={''} />
-              <div className="fullname">
-                <Link to="/profile">
-                  <Button type="link">{userdata.full_name && userdata.full_name}</Button>
-                </Link>
+          </Col>
+          <div className="postactions">
+            <Col span={24}>
+              <div className="postactions_btns">
+                <Button shape="circle" icon={<FileImageOutlined />} />
+                <Button shape="circle" icon={<FolderAddOutlined />} />
+                <Button shape="circle" icon={<GifOutlined />} />
               </div>
-            </div>
-            <Search
-              placeholder="input search text"
-              onSearch={(value) => console.log(value)}
-              style={{ width: 200 }}
-            />
-            <div className="chats_wrap">
-              <List
-                itemLayout="horizontal"
-                dataSource={data}
-                renderItem={(item) => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                      }
-                      title={<a href="/">{item.title}</a>}
-                    />
-                  </List.Item>
-                )}
-              />
-            </div>
+              <div className="post_btn">
+                <Button type="dashed">POST</Button>
+              </div>
+            </Col>
           </div>
-        </Col>
-      </Row>
+        </Row>
+      </Card>
+      <div className="post_section">
+        <Card
+          size="small"
+          bordered={true}
+          style={{ width: '100%' }}
+          cover={
+            <img
+              alt="example"
+              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+            />
+          }
+          actions={[
+            liked ? (
+              <LikeFilled
+                style={{ color: '#1890ff' }}
+                onClick={() => setLiked(false)}
+              />
+            ) : (
+              <LikeOutlined onClick={() => setLiked(true)} key="setting" />
+            ),
+            <CommentOutlined key="edit" />,
+            <ShareAltOutlined key="ellipsis" />,
+          ]}
+        >
+          <Meta
+            avatar={
+              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+            }
+            title="Saiful Islam Shihab"
+            description="This is my white Bear from white hervs,,,,,,"
+          />
+        </Card>
+        <Card
+          size="small"
+          bordered={true}
+          style={{ width: '100%' }}
+          cover={
+            <img
+              alt="example"
+              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+            />
+          }
+          actions={[
+            liked ? (
+              <LikeFilled
+                style={{ color: '#1890ff' }}
+                onClick={() => setLiked(false)}
+              />
+            ) : (
+              <LikeOutlined onClick={() => setLiked(true)} key="setting" />
+            ),
+            <CommentOutlined key="edit" />,
+            <ShareAltOutlined key="ellipsis" />,
+          ]}
+        >
+          <Meta
+            avatar={
+              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+            }
+            title="Saiful Islam Shihab"
+            description="This is my white Bear from white hervs,,,,,,"
+          />
+        </Card>
+      </div>
     </div>
   );
-}
+};
 
-export default withRouter(NewsFeed);
+export default NewsFeed;

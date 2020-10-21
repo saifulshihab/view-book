@@ -50,6 +50,8 @@ body {
   margin-bottom: 10px;
 }
 .profile__btn img {
+  object-fit: cover;
+  object-position: center;
   width: 35px;
   height: 35px;
   border-radius: 50%;
@@ -64,6 +66,7 @@ body {
   height: 50px;
   text-align: center;
   box-shadow: 0px 2px 2px #ddd;
+  margin-bottom: 10px;
 }
 .apps_logo img {
   margin-top: 10px;
@@ -126,4 +129,30 @@ body {
 }
 .pro_info_2 ul li span {
   margin-left: 8px;
+}
+
+.newsfeed {
+  padding: 0 10px;
+}
+.postactions {
+  width: 100%;
+  margin: 10px 0;
+}
+.postactions_btns button {
+  margin-right: 6px;
+}
+.postactions_btns,
+.post_btn {
+  display: inline-block;
+}
+.post_btn {
+  float: right;
+}
+.post_section {
+  height: 75vh;
+  overflow-y: scroll;
+  margin-top: 20px;
+}
+.post_section Card {
+  margin-bottom: 10px !important;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Row, Col } from 'antd';
 import {
   CameraOutlined,
@@ -16,14 +16,14 @@ function Profile(props) {
         <Col span="24">
           <div className="profile_cover">
             {props.user.cover ? (
-              <img src={baseURL + props.user.cover} />
+              <img alt={props.user.username} src={baseURL + props.user.cover} />
             ) : (
               <Button type="primary" shape="circle" icon={<CameraOutlined />} />
             )}
           </div>
           <div className="dp">
             {props.user.dp ? (
-              <img src={baseURL + props.user.dp} />
+              <img alt={props.user.username} src={baseURL + props.user.dp} />
             ) : (
               <Button type="primary" shape="circle" icon={<CameraOutlined />} />
             )}
