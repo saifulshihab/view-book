@@ -1,22 +1,35 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: rgb(252, 252, 252) !important;
+}
+
+.header {
+  width: 100%;
+  padding: 8px;
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  box-shadow: 0px 2px 2px #ddd;
+  z-index: 10000;
+  background-color: #fff;
+}
+.home_body {
+  margin-top: 60px;
+  z-index: -999;
 }
 .left_sidebar {
-  width: 50%;
+  left: 14%;
   height: 100vh;
-  border-right: 1px solid #ddd;
   float: right;
-}
-.left_app_title p {
-  font-size: 30px;
-  margin-bottom: 0;
+  width: 15%;
+  position: fixed;
+  border-right: 1px solid #ddd;
 }
 .right_sidebar {
   padding: 10px;
-  width: 50%;
+  width: 15%;
   height: 100vh;
+  position: fixed;
   border-left: 1px solid #ddd;
 }
 .login_wrap {
@@ -62,33 +75,27 @@ body {
   font-weight: 700;
   margin-bottom: 0;
 }
+
 .apps_logo {
-  width: 100%;
-  height: 50px;
-  text-align: center;
-  box-shadow: 0px 2px 2px #ddd;
-  margin-bottom: 10px;
-}
-.apps_logo img {
-  margin-top: 5px;
-  width: 5%;
+  width: 45px;
   text-shadow: -3px -2px 5px #ffffff, 3px 2px 5px #a3b1c6;
 }
 .profile_details_wrapper {
+  padding: 5px;
 }
-._pro_dp_wrapper{
+._pro_dp_wrapper {
   margin-bottom: 1rem;
 }
 ._pro_dp_wrapper,
 .pro_info_2_wrapper {
   background-color: white;
   border-radius: 10px;
-  box-shadow: 0 2px 2px #ddd;
+  box-shadow: 1px 2px 2px #ddd;
 }
 .pro_info_2_wrapper {
   padding: 8px;
 }
-.pro_info_2_wrapper Button{
+.pro_info_2_wrapper Button {
   margin-bottom: 10px;
 }
 .profile_cover {
@@ -130,6 +137,8 @@ body {
 .pro_info_1 {
   text-align: center;
   margin-top: 20px;
+  padding: 10px;
+  padding-bottom: 20px;
 }
 .pro_info_1 .bio {
   margin-bottom: 0;
@@ -174,4 +183,17 @@ body {
 }
 .post_section Card {
   margin-bottom: 10px !important;
+}
+.public_posts {
+  margin-top: 15px;
+}
+.user_post_heading_h1 {
+  background-color: white;
+  padding: 6px;
+  padding-left: 17px;
+  border-radius: 10px;
+  box-shadow: 1px 2px 2px #ddd;
+}
+.ant-list-split .ant-list-item {
+  border-bottom: 0px !important;
 }

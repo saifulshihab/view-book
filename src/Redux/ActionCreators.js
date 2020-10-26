@@ -228,3 +228,111 @@ export const profileUpdate = (values) => (dispatch) => {
       dispatch(profileUpdateFailed(err.message));
     });
 };
+
+// Fetch single user POst
+
+export const getUserPostsAction = (username) => async (dispatch) => {
+  dispatch({
+    type: ActionType.USER_POST_FETCH_REQUEST,
+  });
+  const AuthHeader = `bearer ${localStorage.getItem('vbtoken')}`;
+  return await fetch(baseURL + `posts/${username}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: AuthHeader,
+    },
+  })
+    .then(
+      (res) => {
+        if (res) {
+          return res;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((res) => res.json())
+    .then((res) => {
+      dispatch({
+        type: ActionType.USER_POST_FETCH_SUCCESS,
+        payload: res,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: ActionType.USER_POST_FETCH_FAILED,
+        payload: err.message,
+      });
+    });
+};
+
+// Fetch public Posts (GET all) (Public)
+
+export const getPublicPostsAction = () => async (dispatch) => {
+  dispatch({
+    type: ActionType.PUBLIC_POST_FETCH_REQUEST,
+  });
+
+  return await fetch(baseURL + `posts`)
+    .then(
+      (res) => {
+        if (res) {
+          return res;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((res) => res.json())
+    .then((res) => {
+      dispatch({
+        type: ActionType.PUBLIC_POST_FETCH_SUCCESS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: ActionType.PUBLIC_POST_FETCH_FAILED,
+        payload: err.message,
+      });
+    });
+};
+
+// POst Submit Aciton (Private)
+export const postSubmitAction = (data) => async (dispatch) => {
+  dispatch({
+    type: ActionType.POST_SUBMIT_REQUEST,
+  });
+  const AuthHeader = `bearer ${localStorage.getItem('vbtoken')}`;
+  return await fetch(baseURL + `posts`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: AuthHeader,
+    },
+    body: JSON.stringify(data),
+  })
+    .then(
+      (res) => {
+        if (res) {
+          return res;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((res) => res.json())
+    .then((res) => {
+      dispatch({ type: ActionType.POST_SUBMIT_SUCCESS });
+    })
+    .catch((err) => {
+      dispatch({
+        type: ActionType.POST_SUBMIT_FAILED,
+        payload: err.message,
+      });
+    });
+};

@@ -12,6 +12,7 @@ import {
 import { baseURL } from '../shared/baseURL';
 import { getProfileInfo, profileUpdate } from '../Redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
+import UserPosts from '../Screens/UserPosts';
 const { Option } = Select;
 
 function Profile({ user }) {
@@ -28,13 +29,12 @@ function Profile({ user }) {
         email: values.email,
         bio: values.bio,
         gender: values.gender,
+        relationship: values.relationship,
       })
     );
     dispatch(getProfileInfo(user.username));
   };
-  const handleOk = (e) => {
-    setModalOpen(false);
-  };
+
   return (
     <div className="profile_details_wrapper">
       <Row>
@@ -69,9 +69,10 @@ function Profile({ user }) {
             </div>
           </div>
           <Row>
-            <Col span={9}>
+            <Col span={1}></Col>
+            <Col span={8}>
+              <h2 className="user_post_heading_h1">Intro</h2>
               <div className="pro_info_2_wrapper">
-                <h2>Intro</h2>
                 <div className="pro_info_2">
                   <ul>
                     <li>
@@ -129,15 +130,20 @@ function Profile({ user }) {
                 <Alert message={errMessage} type="error" showIcon />
               )}
             </Col>
-            <Col span={15}></Col>
+            <Col span={1}></Col>
+            <Col span={13}>
+              <h2 className="user_post_heading_h1">Posts</h2>
+              <UserPosts username={user.username} />
+            </Col>
+            <Col span={1} />
           </Row>
         </Col>
       </Row>
       <Modal
         title="Update Profile"
+        onCancel={() => setModalOpen(false)}
         visible={isModalOpen}
-        onOk={handleOk}
-        okText="Close"
+        footer={null}
       >
         <Form
           initialValues={{
@@ -182,7 +188,7 @@ function Profile({ user }) {
               <Option value="Other">Other</Option>
             </Select>
           </Form.Item>
-          <Form.Item label="Relationship status" name="relation">
+          <Form.Item label="Relationship status" name="relationship">
             <Input defaultValue={user.relationship && user.relationship} />
           </Form.Item>
           <Form.Item>
