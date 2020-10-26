@@ -3,9 +3,7 @@ import * as ActionTypes from './ActionTypes';
 export const Auth = (
   state = {
     isAuthenticated: localStorage.getItem('vbtoken') ? true : false,
-    isLoading: false,
     username: localStorage.getItem('un') ? localStorage.getItem('un') : null,
-    errMessage: null,
   },
   action
 ) => {
@@ -13,16 +11,13 @@ export const Auth = (
     case ActionTypes.LOGIN_REQUEST:
       return {
         ...state,
-        isAuthenticated: false,
         isLoading: true,
-        username: action.creds,
       };
     case ActionTypes.LOGIN_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,
         token: action.token,
-        errMessage: null,
         isLoading: false,
         username: action.username,
       };
@@ -36,7 +31,7 @@ export const Auth = (
     case ActionTypes.LOGOUT_REQUEST:
       return { ...state, isAuthenticated: true };
     case ActionTypes.LOGOUT_SUCCESS:
-      return { ...state, isAuthenticated: false, errMessage: null };
+      return { ...state, isAuthenticated: false };
     default:
       return state;
   }

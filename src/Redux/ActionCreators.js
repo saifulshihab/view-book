@@ -21,10 +21,10 @@ export const loginFailed = (message) => {
     message,
   };
 };
-export const loginUser = (creds) => (dispatch) => {
+export const loginUser = (creds) => async (dispatch) => {
   //dispatch requestLogin to kickoff the call to the API
 
-  return fetch(baseURL + 'users/login', {
+  return await fetch(baseURL + 'users/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -143,5 +143,88 @@ export const signupUser = (values) => (dispatch) => {
     })
     .catch((err) => {
       dispatch(signupFailed(err.message));
+    });
+};
+
+//Profile Data Fetch bu username
+
+export const getProfileInfo = (username) => async (dispatch) => {
+  dispatch({
+    type: ActionType.PROFILE_FETCH_REQUEST,
+  });
+  const AuthHeader = `bearer ${localStorage.getItem('vbtoken')}`;
+  return await fetch(baseURL + `users/${username}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: AuthHeader,
+    },
+  })
+    .then(
+      (res) => {
+        if (res) {
+          return res;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((res) => res.json())
+    .then((res) => {
+      dispatch({
+        type: ActionType.PROFILE_FETCH_SUCCESS,
+        payload: res.user,
+      });
+    });
+};
+
+// Profile update success
+export const profileUpdateSuccess = (message) => {
+  return {
+    type: ActionType.PROFILE_UPDATE_SUCCESS,
+    message,
+  };
+};
+// Profile update Failed
+export const profileUpdateFailed = (message) => {
+  return {
+    type: ActionType.PROFILE_UPDATE_FAILED,
+    message,
+  };
+};
+
+export const profileUpdate = (values) => (dispatch) => {
+  const AuthHeader = `bearer ${localStorage.getItem('vbtoken')}`;
+  return fetch(baseURL + `users/${localStorage.getItem('un')}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: AuthHeader,
+    },
+    body: JSON.stringify(values),
+  })
+    .then(
+      (res) => {
+        if (res.ok) {
+          return res;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.success) {
+        dispatch(profileUpdateSuccess(res.status));
+      } else {
+        const error = new Error(res.status);
+        error.response = res;
+        throw error;
+      }
+    })
+    .catch((err) => {
+      dispatch(profileUpdateFailed(err.message));
     });
 };

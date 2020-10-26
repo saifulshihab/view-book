@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, Checkbox, Alert, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../Redux/ActionCreators';
 
-function Login(props) {
-  let location = useLocation();
+function Login({ history }) {
+  // let location = useLocation();
 
-  let { from } = location.state || { from: { pathname: '/' } };
-  console.log(from);
+  // let { from } = location.state || { from: { pathname: '/' } };
+
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const { isLoading, errMessage, isAuthenticated } = auth;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/home');
+    }
+  }, [isAuthenticated, history]);
   const onFinish = (values) => {
-    props.loginUser({
-      username: values.username,
-      password: values.password,
-    });
+    dispatch(
+      loginUser({
+        username: values.username,
+        password: values.password,
+      })
+    );
   };
 
   return (
@@ -80,10 +93,8 @@ function Login(props) {
               <Button type="link">Register now!</Button>
             </Link>
           </Form.Item>
-          {props.isLoading && <Spin size="small" />}
-          {props.errMess !== null && (
-            <Alert message={props.errMess} type="error" showIcon />
-          )}
+          {isLoading && <Spin size="small" />}
+          {errMessage && <Alert message={errMessage} type="error" showIcon />}
         </Form>
       </div>
     </div>
