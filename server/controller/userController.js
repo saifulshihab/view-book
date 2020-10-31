@@ -39,28 +39,30 @@ const userRegisterController = (req, res) => {
 };
 
 const userLoginController = asyncHandler(async (req, res) => {
-  await passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      throw err;
-    }
+  await passport.authenticate('local', (error, user, info) => {
+    if (error) throw error;
+
     if (!user) {
       res.status(401);
-      throw new Error('Login Unsuccessfull!');
-    } else {
-      req.logIn(user, (err) => {
-        if (err) {
-          res.status(401);
-          throw new Error('Invalid username or password!');
-        }
-        const token = getToken({ _id: req.user._id });
-        res.status(200);
-        res.json({
-          success: true,
-          token: token,
-          username: req.user.username,
-        });
-      });
+      res.json({ success: false, status: 'Login Unsuccessful!', error: info });
     }
+    req.logIn(user, (error) => {
+      if (error) {
+        res.status(401);
+        res.json({
+          success: false,
+          status: 'Login Unsuccessful!',
+          error: 'Could not log in user!',
+        });
+      }
+      const token = getToken({ _id: req.user._id });
+      res.status(200);
+      res.json({      
+        _id: user._id,
+        username: user.username,
+        token: token,
+      });
+    });
   })(req, res);
 });
 

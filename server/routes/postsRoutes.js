@@ -5,6 +5,7 @@ import {
   fetchAllPost,
   postCreate,
   getUserPosts,
+  userPostDelete
 } from '../controller/postController.js';
 const router = express.Router();
 
@@ -14,6 +15,6 @@ const router = express.Router();
 
 router.route('/').get(verifyUser, fetchAllPost).post(verifyUser, postCreate);
 
-router.route('/:id').get(verifyUser, getUserPosts);
+router.route('/:id').get(verifyUser, getUserPosts).delete(verifyUser, userPostDelete);
 
 export default router;

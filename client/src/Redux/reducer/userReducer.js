@@ -19,23 +19,15 @@ import {
   PROFILE_FETCH_PUBLIC_RESET,
 } from '../ActionTypes';
 
-export const AuthReducer = (
-  state = {
-    isAuthenticated: localStorage.getItem('vbtoken') ? true : false,
-    username: localStorage.getItem('un') ? localStorage.getItem('un') : null,
-  },
-  action
-) => {
+export const AuthReducer = (state = {}, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
       return { ...state, loading: true };
     case LOGIN_SUCCESS:
       return {
-        ...state,
         isAuthenticated: true,
-        token: action.token,
         loading: false,
-        username: action.username,
+        userInfo: action.payload,
       };
     case LOGIN_FAILED:
       return {

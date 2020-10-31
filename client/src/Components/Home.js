@@ -35,24 +35,17 @@ const data = [
 ];
 
 function Home() {
-
   const dispatch = useDispatch();
 
   const auth = useSelector((state) => state.auth);
-  const { username, isAuthenticated } = auth;
-  
+  const { userInfo, isAuthenticated } = auth;
+
   const userProfileInfo = useSelector((state) => state.userProfileInfo);
   const { user, loading, error } = userProfileInfo;
 
   useEffect(() => {
-
-    dispatch(getProfileInfoUser(username));
-    dispatch({
-      type: PROFILE_FETCH_USER_RESET
-    })
-
-  }, [username, dispatch]);
-
+    dispatch(getProfileInfoUser(userInfo.username));
+  }, [userInfo.username, dispatch]);
 
   const logoutHandler = () => {
     dispatch(logoutUser());

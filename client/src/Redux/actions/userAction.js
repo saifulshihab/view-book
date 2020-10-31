@@ -36,12 +36,9 @@ export const loginUser = (creds) => async (dispatch) => {
 
     dispatch({
       type: LOGIN_SUCCESS,
-      token: data.token,
-      username: data.username,
+      payload: data,
     });
-
-    localStorage.setItem('vbtoken', data.token);
-    localStorage.setItem('un', data.username);
+    localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: LOGIN_FAILED,
@@ -59,8 +56,7 @@ export const logoutUser = () => async (dispatch) => {
       type: LOGOUT_REQUEST,
     });
 
-    localStorage.removeItem('vbtoken');
-    localStorage.removeItem('un');
+    localStorage.removeItem('userInfo');
 
     dispatch({
       type: LOGOUT_SUCCESS,
@@ -106,17 +102,20 @@ export const signupUser = (values) => async (dispatch) => {
 };
 
 //Profile Data Fetch by username / only user
-export const getProfileInfoUser = (username) => async (dispatch) => {
+export const getProfileInfoUser = (username) => async (dispatch, getState) => {
   try {
     dispatch({
       type: PROFILE_FETCH_USER_REQUEST,
     });
 
-    const AuthHeader = `bearer ${localStorage.getItem('vbtoken')}`;
+    const {
+      auth: { userInfo },
+    } = getState();
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: AuthHeader,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
     const { data } = await axios.get(`/users/${username}`, config);
@@ -137,17 +136,22 @@ export const getProfileInfoUser = (username) => async (dispatch) => {
 };
 
 //Profile Data Fetch by username / public
-export const getProfileInfoPublic = (username) => async (dispatch) => {
+export const getProfileInfoPublic = (username) => async (
+  dispatch,
+  getState
+) => {
   try {
     dispatch({
       type: PROFILE_FETCH_PUBLIC_REQUEST,
     });
+    const {
+      auth: { userInfo },
+    } = getState();
 
-    const AuthHeader = `bearer ${localStorage.getItem('vbtoken')}`;
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: AuthHeader,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
     const { data } = await axios.get(`/users/${username}`, config);
@@ -168,13 +172,16 @@ export const getProfileInfoPublic = (username) => async (dispatch) => {
 };
 
 //user profile update
-export const profileUpdate = (values) => async (dispatch) => {
+export const profileUpdate = (values) => async (dispatch, getState) => {
   try {
-    const AuthHeader = `bearer ${localStorage.getItem('vbtoken')}`;
+    const {
+      auth: { userInfo },
+    } = getState();
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: AuthHeader,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
     await axios.put(`users/${localStorage.getItem('un')}`, values, config);

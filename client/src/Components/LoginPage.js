@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button, Checkbox, Alert, Spin } from 'antd';
+import { Form, Input, Button, Alert, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +16,7 @@ function Login({ history }) {
 
   useEffect(() => {
     if (isAuthenticated) {
-      history.push('/newsfeed');
+      history.push('/');
     }
   }, [isAuthenticated, history]);
 
@@ -33,14 +33,7 @@ function Login({ history }) {
     <div>
       <div className="login_wrap">
         <h1>Login</h1>
-        <Form
-          name="normal_login"
-          className="login-form"
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-        >
+        <Form name="normal_login" className="login-form" onFinish={onFinish}>
           <Form.Item
             name="username"
             rules={[
@@ -71,15 +64,6 @@ function Login({ history }) {
               autoComplete="on"
             />
           </Form.Item>
-          <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-
-            <a className="login-form-forgot" href="/">
-              Forgot password
-            </a>
-          </Form.Item>
 
           <Form.Item>
             <Button
@@ -95,7 +79,13 @@ function Login({ history }) {
             </Link>
           </Form.Item>
           {loading && <Spin size="small" />}
-          {error && <Alert message={error} type="error" showIcon />}
+          {error && (
+            <Alert
+              message={'Invalid Username or Password!'}
+              type="error"
+              showIcon
+            />
+          )}
         </Form>
       </div>
     </div>

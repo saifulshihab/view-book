@@ -23,7 +23,7 @@ const PublicPosts = ({ posts }) => {
               borderRadius: '10px',
               width: '100%',
               marginBottom: '10px',
-              boxShadow: '1px 2px 2px #ddd',
+              boxShadow: 'rgb(191 191 191) 0px 1px 1px',
             }}
             key={post._id}
             size="small"
@@ -46,7 +46,7 @@ const PublicPosts = ({ posts }) => {
             ]}
           >
             <Meta
-              avatar={<Avatar src={post.user.dp && post.user.dp} />}
+              avatar={<Avatar className="public_post_img" src={post.user.dp && post.user.dp} />}
               title={
                 <Link
                   to={`/user/${post.user.username}`}

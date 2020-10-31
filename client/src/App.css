@@ -133,6 +133,11 @@ body {
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
+  border: 3px solid #03a9f4;
+}
+.public_post_img img{
+    border-radius: 50%;
+  border: 2px solid #a7acaf;
 }
 .pro_info_1 {
   text-align: center;
@@ -199,7 +204,7 @@ body {
 }
 .post_caption  {
   margin-top: 0px !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
 }
 .post_time{
  font-weight: 400 !important;

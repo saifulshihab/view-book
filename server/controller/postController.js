@@ -26,7 +26,8 @@ const postCreate = asyncHandler(async (req, res) => {
 });
 
 const getUserPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({}).sort({createdAt: '-1'})
+  const posts = await Post.find({})
+    .sort({ createdAt: '-1' })
     .populate('user')
     .find({ user: req.params.id });
 
@@ -39,4 +40,21 @@ const getUserPosts = asyncHandler(async (req, res) => {
   }
 });
 
-export { getUserPosts, fetchAllPost, postCreate };
+const userPostDelete = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if (post) {
+    if ((post.user).equals(req.user._id)) {
+      await Post.findByIdAndRemove(req.params.id);
+      res.status(200);
+      res.json(post);
+    } else {
+      res.status(401);
+      throw new Error('You are not authorized to delete this post!');
+    }
+  } else {
+    res.status(404);
+    throw new Error('Post not found!');
+  }
+});
+
+export { getUserPosts, fetchAllPost, postCreate, userPostDelete };

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import {
   CommentOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
   LikeFilled,
   LikeOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
-import { Alert, Card, Spin, Typography } from 'antd';
+import { Alert, Card, Dropdown, Menu, Spin, Typography } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserPostsAction } from '../Redux/actions/postAction';
+import { getUserPostsAction, deletePost } from '../Redux/actions/postAction';
 import { baseURL } from '../shared/baseURL';
 
 const { Meta } = Card;
@@ -18,17 +21,28 @@ const UserPosts = ({ userId }) => {
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(false);
 
+  const auth = useSelector((state) => state.auth);
+  const { userInfo } = auth;
+
   const getUserPosts = useSelector((state) => state.getUserPosts);
   const { loading, error, posts } = getUserPosts;
 
+  const postDelete = useSelector((state) => state.postDelete);
+  const { success: deleteSuccess, error: deleteError } = postDelete;
+
   useEffect(() => {
     dispatch(getUserPostsAction(userId));
-  }, [dispatch, userId]);
+  }, [dispatch, userId, deleteSuccess]);
+
+  const postDeleteHandler = (id) => {
+    dispatch(deletePost(id));
+  };
 
   return (
     <div className="user_personal_post">
       {loading && <Spin />}
       {error && <Alert message={error} type="error" showIcon />}
+      {deleteError && <Alert message={deleteError} type="error" showIcon />}
       {posts &&
         posts.map((post) => (
           <Card
@@ -36,7 +50,7 @@ const UserPosts = ({ userId }) => {
               borderRadius: '10px',
               width: '100%',
               marginBottom: '10px',
-              boxShadow: '1px 2px 2px #ddd',
+              boxShadow: 'rgb(191 191 191) 0px 1px 1px',
             }}
             key={post._id}
             size="small"
@@ -70,6 +84,33 @@ const UserPosts = ({ userId }) => {
               ),
               <CommentOutlined key="comment" />,
               <ShareAltOutlined key="share" />,
+              <>
+                {userInfo && userInfo._id === userId && (
+                  <Dropdown
+                    overlay={
+                      <Menu>
+                        <Menu.Item key="1" onClick={() => alert('Hi')}>
+                          <EditOutlined /> Edit
+                        </Menu.Item>
+                        <Menu.Item
+                          key="2"
+                          onClick={() => postDeleteHandler(post._id)}
+                        >
+                          <DeleteOutlined /> Delete
+                        </Menu.Item>
+                      </Menu>
+                    }
+                  >
+                    <a
+                      href="/"
+                      className="ant-dropdown-link"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <EllipsisOutlined />
+                    </a>
+                  </Dropdown>
+                )}
+              </>,
             ]}
           >
             <Meta

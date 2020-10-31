@@ -44,7 +44,7 @@ const NewsFeed = () => {
           width: '100%',
           borderRadius: '10px',
           marginBottom: '10px',
-          boxShadow: '1px 2px 2px #ddd',
+          boxShadow: 'rgb(191 191 191) 0px 1px 1px',
         }}
       >
         <Row>
