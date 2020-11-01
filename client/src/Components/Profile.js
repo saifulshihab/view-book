@@ -59,7 +59,6 @@ function Profile({ user }) {
                   type="primary"
                   htmlType="button"
                   shape="circle"
-                
                   icon={<CameraOutlined />}
                 />
               )}
@@ -161,12 +160,7 @@ function Profile({ user }) {
         visible={isModalOpen}
         footer={null}
       >
-        <Form
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={profileUpdateHandler}
-        >
+        <Form onFinish={profileUpdateHandler}>
           <Form.Item label="Full Name" name="full_name">
             <Input defaultValue={user.full_name && user.full_name} />
           </Form.Item>

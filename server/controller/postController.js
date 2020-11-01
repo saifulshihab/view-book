@@ -29,7 +29,7 @@ const getUserPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({})
     .sort({ createdAt: '-1' })
     .populate('user')
-    .find({ user: req.params.id });
+    .find({ user: req.params.userId });
 
   if (posts) {
     res.status(200);
@@ -40,11 +40,22 @@ const getUserPosts = asyncHandler(async (req, res) => {
   }
 });
 
+const getPostById = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.postId).populate('user');
+  if (post) {
+    res.status(200);
+    res.json(post);
+  } else {
+    res.status(404);
+    throw new Error('Post not found!');
+  }
+});
+
 const userPostDelete = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.postId);
   if (post) {
     if (post.user.equals(req.user._id)) {
-      await Post.findByIdAndRemove(req.params.id);
+      await Post.findByIdAndRemove(req.params.postId);
       res.status(200);
       res.json(post);
     } else {
@@ -57,4 +68,30 @@ const userPostDelete = asyncHandler(async (req, res) => {
   }
 });
 
-export { getUserPosts, fetchAllPost, postCreate, userPostDelete };
+const userPostEdit = asyncHandler(async (req, res) => {
+  const { caption, image } = req.body;
+  const post = await Post.findById(req.params.postId);
+  if (post) {
+    if (post.user.equals(req.user._id)) {
+      post.caption = caption;
+      post.image = image;
+      const updatedPost = await post.save();
+      res.status(201).json(updatedPost);
+    } else {
+      res.status(401);
+      throw new Error('You are not authorized to edit this post!');
+    }
+  } else {
+    res.status(404);
+    throw new Error('Post not found!');
+  }
+});
+
+export {
+  getUserPosts,
+  fetchAllPost,
+  postCreate,
+  userPostDelete,
+  userPostEdit,
+  getPostById,
+};

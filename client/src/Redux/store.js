@@ -8,10 +8,12 @@ import {
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
-  getPostReducer,
+  getUserPostReducer,
   getPublicPostReducer,
+  postDeatilsReducer,
   postSubmitReducer,
   postDeleteReducer,
+  postEditReducer,
 } from '../Redux/reducer/postReducers';
 
 const reducer = combineReducers({
@@ -20,10 +22,12 @@ const reducer = combineReducers({
   userProfileInfo: profileInfoUserReducer,
   publicProfileInfo: profileInfoPublicReducer,
   userProfileUpdate: profileUpdateReducer,
-  getUserPosts: getPostReducer,
+  getUserPosts: getUserPostReducer,
   getPublicPosts: getPublicPostReducer,
+  postDetails: postDeatilsReducer,
   postSubmit: postSubmitReducer,
   postDelete: postDeleteReducer,
+  postEdit: postEditReducer,
 });
 
 const initialState = {

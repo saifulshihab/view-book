@@ -17,6 +17,7 @@ import Header from './Header';
 import { logoutUser } from '../Redux/actions/userAction';
 import { getProfileInfoUser } from '../Redux/actions/userAction';
 import UserProfileVisitScreen from '../Screens/UserProfileVisitScreen';
+import PostDetailsScreen from '../Screens/PostDetailsScreen';
 
 const data = [
   {
@@ -107,7 +108,13 @@ function Home() {
               <PrivateRoute path="/newsfeed" component={() => <NewsFeed />} />
               <PrivateRoute
                 path="/user/:username"
+                exact
                 component={UserProfileVisitScreen}
+              />
+              <PrivateRoute
+                exact
+                path="/user/post/:postId"
+                component={PostDetailsScreen}
               />
               <Redirect to="/newsfeed" />
             </Switch>

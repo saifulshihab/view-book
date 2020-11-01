@@ -4,6 +4,12 @@ import {
   POST_DELETE_FAILED,
   POST_DELETE_REQUEST,
   POST_DELETE_SUCCESS,
+  POST_DETAILS_FAILED,
+  POST_DETAILS_REQUEST,
+  POST_DETAILS_SUCCESS,
+  POST_EDIT_FAILED,
+  POST_EDIT_REQUEST,
+  POST_EDIT_SUCCESS,
   POST_SUBMIT_FAILED,
   POST_SUBMIT_REQUEST,
   POST_SUBMIT_SUCCESS,
@@ -66,7 +72,7 @@ export const getUserPostsAction = (userId) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    const { data } = await axios.get(`/posts/${userId}`, config);
+    const { data } = await axios.get(`/posts/user/${userId}`, config);
 
     dispatch({
       type: USER_POST_FETCH_SUCCESS,
@@ -115,6 +121,38 @@ export const postSubmitAction = (data) => async (dispatch, getState) => {
   }
 };
 
+// Post Details Aciton
+export const detailsPost = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: POST_DETAILS_REQUEST,
+    });
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/posts/${id}`, config);
+
+    dispatch({
+      type: POST_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: POST_DETAILS_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
 // POst Delete Aciton (Private)
 export const deletePost = (id) => async (dispatch, getState) => {
   try {
@@ -138,6 +176,36 @@ export const deletePost = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: POST_DELETE_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+// POst Edit Aciton (Private)
+export const editPost = (post) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: POST_EDIT_REQUEST,
+    });
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.put(`/posts/${post._id}`, post, config);
+
+    dispatch({
+      type: POST_EDIT_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: POST_EDIT_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

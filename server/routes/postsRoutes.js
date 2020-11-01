@@ -5,16 +5,18 @@ import {
   fetchAllPost,
   postCreate,
   getUserPosts,
-  userPostDelete
+  userPostDelete,
+  userPostEdit,
+  getPostById,
 } from '../controller/postController.js';
 const router = express.Router();
 
-// router.options('*', cors.corsWithOptions, (req, res) => {
-//   res.sendStatus(200);
-// });
-
 router.route('/').get(verifyUser, fetchAllPost).post(verifyUser, postCreate);
-
-router.route('/:id').get(verifyUser, getUserPosts).delete(verifyUser, userPostDelete);
+router.route('/user/:userId').get(verifyUser, getUserPosts);
+router
+  .route('/:postId')
+  .get(verifyUser, getPostById)
+  .delete(verifyUser, userPostDelete)
+  .put(verifyUser, userPostEdit);
 
 export default router;

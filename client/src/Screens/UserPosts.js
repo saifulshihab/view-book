@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import {
   CommentOutlined,
   DeleteOutlined,
@@ -16,6 +17,7 @@ import Avatar from 'antd/lib/avatar/avatar';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserPostsAction, deletePost } from '../Redux/actions/postAction';
 import { baseURL } from '../shared/baseURL';
+import { Link } from 'react-router-dom';
 
 const { Meta } = Card;
 const { Title } = Typography;
@@ -57,7 +59,7 @@ const UserPosts = ({ userId }) => {
             key={post._id}
             size="small"
             bordered={true}
-            cover={post.image && <img alt="example" src={post.image} />}
+            cover={post.image && <img alt={post.caption} src={post.image} />}
             actions={[
               <span style={{ display: 'inline-block' }}>
                 <HeartFilled style={{ color: '#1890ff' }} />
@@ -71,8 +73,10 @@ const UserPosts = ({ userId }) => {
                 overlay={
                   <Menu>
                     {userInfo && userInfo._id === userId && (
-                      <Menu.Item key="1" onClick={() => alert('Hi')}>
-                        <EditOutlined /> Edit Post
+                      <Menu.Item key="1">
+                        <Link to={`/user/post/${post._id}`}>
+                          <EditOutlined /> Edit Post
+                        </Link>
                       </Menu.Item>
                     )}
                     {userInfo && userInfo._id === userId && (
@@ -133,13 +137,17 @@ const UserPosts = ({ userId }) => {
                     }).format(new Date(post.createdAt))}
                   </Title>
                   {!post.image ? (
-                    <Title className="post_caption" level={3}>
-                      {post.caption}
-                    </Title>
+                    <Link to={`/user/post/${post._id}`}>
+                      <Title className="post_caption" level={3}>
+                        {post.caption}
+                      </Title>
+                    </Link>
                   ) : (
-                    <Title className="post_caption" level={4}>
-                      {post.caption}
-                    </Title>
+                    <Link to={`/user/post/${post._id}`}>
+                      <Title className="post_caption" level={4}>
+                        {post.caption}
+                      </Title>
+                    </Link>
                   )}
                 </>
               }

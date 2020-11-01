@@ -18,8 +18,7 @@ const CommentSchema = mongoose.Schema(
 const PostSchema = mongoose.Schema(
   {
     caption: {
-      type: String,
-      required: true,
+      type: String
     },
     image: {
       type: String,

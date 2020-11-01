@@ -59,7 +59,7 @@ const PublicPosts = () => {
             key={post._id}
             size="small"
             bordered={true}
-            cover={post.image && <img alt="example" src={post.image} />}
+            cover={post.image && <img alt={post.caption} src={post.image} />}
             actions={[
               <span style={{ display: 'inline-block' }}>
                 <HeartOutlined style={{}} key="like" />
@@ -146,13 +146,17 @@ const PublicPosts = () => {
                     }).format(new Date(post.createdAt))}
                   </Title>
                   {!post.image ? (
-                    <Title className="post_caption" level={3}>
-                      {post.caption}
-                    </Title>
+                    <Link to={`/user/post/${post._id}`}>
+                      <Title className="post_caption" level={3}>
+                        {post.caption}
+                      </Title>
+                    </Link>
                   ) : (
-                    <Title className="post_caption" level={4}>
-                      {post.caption}
-                    </Title>
+                    <Link to={`/user/post/${post._id}`}>
+                      <Title className="post_caption" level={4}>
+                        {post.caption}
+                      </Title>
+                    </Link>
                   )}
                 </>
               }

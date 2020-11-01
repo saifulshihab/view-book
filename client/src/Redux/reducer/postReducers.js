@@ -3,6 +3,14 @@ import {
   POST_DELETE_REQUEST,
   POST_DELETE_RESET,
   POST_DELETE_SUCCESS,
+  POST_DETAILS_FAILED,
+  POST_DETAILS_REQUEST,
+  POST_DETAILS_RESET,
+  POST_DETAILS_SUCCESS,
+  POST_EDIT_FAILED,
+  POST_EDIT_REQUEST,
+  POST_EDIT_RESET,
+  POST_EDIT_SUCCESS,
   POST_SUBMIT_FAILED,
   POST_SUBMIT_REQUEST,
   POST_SUBMIT_RESET,
@@ -15,7 +23,7 @@ import {
   USER_POST_FETCH_SUCCESS,
 } from '../ActionTypes';
 
-export const getPostReducer = (
+export const getUserPostReducer = (
   state = {
     posts: [],
   },
@@ -66,6 +74,26 @@ export const postSubmitReducer = (state = {}, action) => {
   }
 };
 
+export const postDeatilsReducer = (
+  state = {
+    post: { user: {}, comment: [] },
+  },
+  action
+) => {
+  switch (action.type) {
+    case POST_DETAILS_REQUEST:
+      return { ...state, loading: true };
+    case POST_DETAILS_SUCCESS:
+      return { loading: false, post: action.payload };
+    case POST_DETAILS_FAILED:
+      return { loading: false, error: action.payload };
+    case POST_DETAILS_RESET:
+      return { post: {} };
+    default:
+      return state;
+  }
+};
+
 export const postDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case POST_DELETE_REQUEST:
@@ -75,6 +103,21 @@ export const postDeleteReducer = (state = {}, action) => {
     case POST_DELETE_FAILED:
       return { loading: false, error: action.payload };
     case POST_DELETE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const postEditReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_EDIT_REQUEST:
+      return { loading: true };
+    case POST_EDIT_SUCCESS:
+      return { loading: false, success: true };
+    case POST_EDIT_FAILED:
+      return { loading: false, error: action.payload };
+    case POST_EDIT_RESET:
       return {};
     default:
       return state;
