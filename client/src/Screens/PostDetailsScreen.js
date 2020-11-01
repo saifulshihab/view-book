@@ -196,7 +196,7 @@ const PostDetailsScreen = ({ history, match }) => {
         ]}
       >
         <Meta
-          avatar={<Avatar src={post.user.dp && baseURL + post.user.dp} />}
+          avatar={<Avatar src={post.user.dp &&  post.user.dp} />}
           title={post.user.full_name}
           description={
             <>

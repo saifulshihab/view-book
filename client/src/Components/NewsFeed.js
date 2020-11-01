@@ -81,15 +81,12 @@ const NewsFeed = () => {
               onFinish={submitHandler}
             >
               <Form.Item name="caption">
-                <Input
-                  size="large"
-                  placeholder="Whats on your mind?"
-                  style={{ borderRadius: '40px' }}
-                />
+                <Input size="large" placeholder="Whats on your mind?" />
               </Form.Item>
               <div className="postactions">
                 <div className="postactions_btns">
                   <Form.Item
+                    style={{ marginBottom: 0 }}
                     name="image"
                     valuePropName="fileList"
                     getValueFromEvent={normFile}

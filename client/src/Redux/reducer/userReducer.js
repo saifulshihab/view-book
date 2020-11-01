@@ -7,6 +7,7 @@ import {
   SIGNUP_FAILED,
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
+  PROFILE_UPDATE_REQUEST,
   PROFILE_UPDATE_FAILED,
   PROFILE_UPDATE_SUCCESS,
   PROFILE_FETCH_USER_REQUEST,
@@ -17,6 +18,15 @@ import {
   PROFILE_FETCH_PUBLIC_SUCCESS,
   PROFILE_FETCH_PUBLIC_FAILED,
   PROFILE_FETCH_PUBLIC_RESET,
+  PROFILE_UPDATE_RESET,
+  PROFILE_DP_UPDATE_REQUEST,
+  PROFILE_DP_UPDATE_SUCCESS,
+  PROFILE_DP_UPDATE_FAILED,
+  PROFILE_DP_UPDATE_RESET,
+  PROFILE_COVER_UPDATE_REQUEST,
+  PROFILE_COVER_UPDATE_SUCCESS,
+  PROFILE_COVER_UPDATE_FAILED,
+  PROFILE_COVER_UPDATE_RESET,
 } from '../ActionTypes';
 
 export const AuthReducer = (state = {}, action) => {
@@ -60,7 +70,7 @@ export const SignupReducer = (state = {}, action) => {
 
 export const profileInfoUserReducer = (
   state = {
-    user: {},
+    user: { social: [], education: [] },
   },
   action
 ) => {
@@ -72,7 +82,7 @@ export const profileInfoUserReducer = (
     case PROFILE_FETCH_USER_FAILED:
       return { loading: false, error: action.payload };
     case PROFILE_FETCH_USER_RESET:
-      return { user: {} };
+      return { user: { social: [], education: [] } };
     default:
       return state;
   }
@@ -80,7 +90,7 @@ export const profileInfoUserReducer = (
 
 export const profileInfoPublicReducer = (
   state = {
-    user: {},
+    user: { social: [], education: [] },
   },
   action
 ) => {
@@ -92,7 +102,7 @@ export const profileInfoPublicReducer = (
     case PROFILE_FETCH_PUBLIC_FAILED:
       return { loading: false, error: action.payload };
     case PROFILE_FETCH_PUBLIC_RESET:
-      return { user: {} };
+      return { user: { social: [], education: [] } };
     default:
       return state;
   }
@@ -100,10 +110,44 @@ export const profileInfoPublicReducer = (
 
 export const profileUpdateReducer = (state = {}, action) => {
   switch (action.type) {
+    case PROFILE_UPDATE_REQUEST:
+      return { loading: true };
     case PROFILE_UPDATE_SUCCESS:
-      return { success: true };
+      return { loading: false, success: true };
     case PROFILE_UPDATE_FAILED:
-      return { error: action.payload };
+      return { loading: false, error: action.payload };
+    case PROFILE_UPDATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const profileDpUpdateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PROFILE_DP_UPDATE_REQUEST:
+      return { loading: true };
+    case PROFILE_DP_UPDATE_SUCCESS:
+      return { loading: false, success: true };
+    case PROFILE_DP_UPDATE_FAILED:
+      return { loading: false, error: action.payload };
+    case PROFILE_DP_UPDATE_RESET:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const profileCoverUpdateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PROFILE_COVER_UPDATE_REQUEST:
+      return { loading: true };
+    case PROFILE_COVER_UPDATE_SUCCESS:
+      return { loading: false, success: true };
+    case PROFILE_COVER_UPDATE_FAILED:
+      return { loading: false, error: action.payload };
+    case PROFILE_COVER_UPDATE_RESET:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }

@@ -57,7 +57,7 @@ const userLoginController = asyncHandler(async (req, res) => {
       }
       const token = getToken({ _id: req.user._id });
       res.status(200);
-      res.json({      
+      res.json({
         _id: user._id,
         username: user.username,
         token: token,
@@ -77,60 +77,53 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-const userProfileUpdate = (req, res) => {
+const userProfileUpdate = asyncHandler(async (req, res) => {
   //check curent user is valid
-  User.findOne({
-    username: req.params.username,
-  })
-    .then(
-      (user) => {
-        const reqUser = req.user._id;
-        const currUser = user._id;
-        if (reqUser.equals(currUser)) {
-          //update user
-          User.findByIdAndUpdate(
-            req.user._id,
-            { $set: req.body },
-            { new: true }
-          )
-            .then(
-              (user) => {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json({
-                  success: true,
-                  status: 'Profile is Updated!',
-                });
-              },
-              (err) => {
-                return next(err);
-              }
-            )
-            .catch((err) => {
-              return next(err);
-            });
-        } else {
-          const error = new Error(
-            'You are not the valid user to perform this action!'
-          );
-          error.status = 403;
-          return next(error);
-        }
-      },
-      (err) => {
-        return next(err);
+  const user = await User.findOne({ username: req.params.username });
+  if (user) {
+    if (req.user._id.equals(user._id)) {
+      const updateduser = await User.findByIdAndUpdate(
+        req.user._id,
+        { $set: req.body },
+        { new: true }
+      );
+      if (updateduser) {
+        res.status(200);
+        res.json({
+          success: true,
+          status: 'Prfoile is Updated!',
+        });
+      } else {
+        throw new Error();
       }
-    )
-    .catch((err) => {
-      next(err);
-    });
-};
+    } else {
+      res.status(400);
+      throw new Error('You are not authorized to edit this!');
+    }
+  } else {
+    res.status(404);
+    throw new Error('User Not Found!');
+  }
+});
 
 const updateUserCover = asyncHandler(async (req, res) => {
   const { cover } = req.body;
   const user = await User.findById(req.params.id);
   if (user) {
-    user.cover = cover;
+    user.cover = cover || user.cover;
+    const updatedUser = await user.save();
+    res.status(201).json(updatedUser);
+  } else {
+    res.status(404);
+    throw new Error('User not Found!');
+  }
+});
+
+const updateUserDp = asyncHandler(async (req, res) => {
+  const { dp } = req.body;
+  const user = await User.findById(req.params.id);
+  if (user) {
+    user.dp = dp || user.dp;
     const updatedUser = await user.save();
     res.status(201).json(updatedUser);
   } else {
@@ -145,4 +138,5 @@ export {
   userLoginController,
   getUserProfile,
   userProfileUpdate,
+  updateUserDp,
 };

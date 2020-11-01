@@ -4,8 +4,7 @@ import PassportLocal from 'passport-local-mongoose';
 
 const SocialSchema = new Schema({
   platform: {
-    type: String,
-    required: true,
+    type: String
   },
   link: {
     type: String,
@@ -19,24 +18,17 @@ const EduSchema = new Schema({
   },
   desc: {
     type: String,
-    required: true,
   },
   from: {
     type: String,
-    required: true,
   },
   to: {
     type: String,
-    required: true,
   },
-  continue: {
+  present: {
     type: Boolean,
     default: false,
-  },
-  link: {
-    type: String,
-    required: true,
-  },
+  }
 });
 
 const UserSchema = new Schema(

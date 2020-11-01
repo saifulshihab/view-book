@@ -102,7 +102,7 @@ function Home() {
             <Switch>
               <PrivateRoute
                 path="/profile"
-                component={() => <Profile user={user} />}
+                component={() => <Profile username={userInfo.username} />}
               />
               <PrivateRoute path="/settings" component={() => <Settings />} />
               <PrivateRoute path="/newsfeed" component={() => <NewsFeed />} />
@@ -123,7 +123,7 @@ function Home() {
             <div className="right_sidebar">
               <div className="profile__btn">
                 {user.dp ? (
-                  <img src={baseURL + user.dp} alt={user.full_name} />
+                  <img src={user.dp} alt={user.full_name} />
                 ) : (
                   <img src="/" alt={user.username} />
                 )}
@@ -142,9 +142,7 @@ function Home() {
                   renderItem={(item) => (
                     <List.Item>
                       <List.Item.Meta
-                        avatar={
-                          <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                        }
+                        avatar={<Avatar src="" />}
                         title={<a href="/">{item.title}</a>}
                       />
                     </List.Item>

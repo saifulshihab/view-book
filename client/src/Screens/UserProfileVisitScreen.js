@@ -39,7 +39,7 @@ const UserProfileVisitScreen = ({ match }) => {
                 {userPublic.cover ? (
                   <img
                     alt={userPublic.username}
-                    src={baseURL + userPublic.cover}
+                    src={userPublic.cover}
                   />
                 ) : (
                   <img src="" alt="" />
@@ -49,7 +49,7 @@ const UserProfileVisitScreen = ({ match }) => {
                 {userPublic.dp ? (
                   <img
                     alt={userPublic.username}
-                    src={baseURL + userPublic.dp}
+                    src={userPublic.dp}
                   />
                 ) : (
                   <img src="" alt="" />

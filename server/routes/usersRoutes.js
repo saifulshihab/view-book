@@ -9,6 +9,7 @@ import {
   userProfileUpdate,
   getUserProfile,
   updateUserCover,
+  updateUserDp,
 } from '../controller/userController.js';
 
 // router.options('*', cors, corsWithOptions, (req, res) => {
@@ -26,6 +27,7 @@ router
   .get(verifyUser, getUserProfile)
   .put(verifyUser, userProfileUpdate);
 
-router.route('/:id').post(verifyUser, updateUserCover);
+router.route('/:id/cover').put(verifyUser, updateUserCover);
+router.route('/:id/dp').put(verifyUser, updateUserDp);
 
 export default router;

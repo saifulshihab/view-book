@@ -1,9 +1,10 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { AuthReducer, SignupReducer } from '../Redux/reducer/userReducer';
+import { AuthReducer, profileCoverUpdateReducer, SignupReducer } from '../Redux/reducer/userReducer';
 import {
   profileUpdateReducer,
   profileInfoUserReducer,
   profileInfoPublicReducer,
+  profileDpUpdateReducer,
 } from '../Redux/reducer/userReducer';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -28,6 +29,8 @@ const reducer = combineReducers({
   postSubmit: postSubmitReducer,
   postDelete: postDeleteReducer,
   postEdit: postEditReducer,
+  profileDpUpdate: profileDpUpdateReducer,
+  profileCoverUpdate: profileCoverUpdateReducer,
 });
 
 const initialState = {

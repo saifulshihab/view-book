@@ -15,6 +15,12 @@ import {
   PROFILE_FETCH_USER_SUCCESS,
   PROFILE_UPDATE_FAILED,
   PROFILE_UPDATE_SUCCESS,
+  PROFILE_DP_UPDATE_REQUEST,
+  PROFILE_DP_UPDATE_SUCCESS,
+  PROFILE_DP_UPDATE_FAILED,
+  PROFILE_COVER_UPDATE_REQUEST,
+  PROFILE_COVER_UPDATE_SUCCESS,
+  PROFILE_COVER_UPDATE_FAILED,
   SIGNUP_FAILED,
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
@@ -114,7 +120,6 @@ export const getProfileInfoUser = (username) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -184,7 +189,8 @@ export const profileUpdate = (values) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    await axios.put(`users/${localStorage.getItem('un')}`, values, config);
+
+    await axios.put(`users/${userInfo.username}`, values, config);
 
     dispatch({
       type: PROFILE_UPDATE_SUCCESS,
@@ -192,6 +198,72 @@ export const profileUpdate = (values) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: PROFILE_UPDATE_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//user profile dp update
+export const updateProfileDp = (dp) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PROFILE_DP_UPDATE_REQUEST,
+    });
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.put(`users/${userInfo._id}/dp`, { dp }, config);
+
+    dispatch({
+      type: PROFILE_DP_UPDATE_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: PROFILE_DP_UPDATE_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//user profile cover update
+export const updateProfileCover = (cover) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PROFILE_COVER_UPDATE_REQUEST,
+    });
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.put(`users/${userInfo._id}/cover`, { cover }, config);
+
+    dispatch({
+      type: PROFILE_COVER_UPDATE_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: PROFILE_COVER_UPDATE_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
