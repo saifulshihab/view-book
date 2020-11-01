@@ -10,6 +10,7 @@ import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/usersRoutes.js';
 import postsRouter from './routes/postsRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use(passport.initialize());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
+app.use('/upload', uploadRoutes);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

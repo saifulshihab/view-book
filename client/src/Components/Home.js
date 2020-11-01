@@ -17,7 +17,6 @@ import Header from './Header';
 import { logoutUser } from '../Redux/actions/userAction';
 import { getProfileInfoUser } from '../Redux/actions/userAction';
 import UserProfileVisitScreen from '../Screens/UserProfileVisitScreen';
-import { PROFILE_FETCH_USER_RESET } from '../Redux/ActionTypes';
 
 const data = [
   {

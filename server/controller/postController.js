@@ -13,8 +13,8 @@ const fetchAllPost = asyncHandler(async (req, res) => {
 });
 
 const postCreate = asyncHandler(async (req, res) => {
-  const { caption } = req.body;
-  const creaePost = await Post.create({ caption, user: req.user });
+  const { caption, image } = req.body;
+  const creaePost = await Post.create({ caption, image, user: req.user });
 
   if (creaePost) {
     res.status(200);
@@ -43,7 +43,7 @@ const getUserPosts = asyncHandler(async (req, res) => {
 const userPostDelete = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (post) {
-    if ((post.user).equals(req.user._id)) {
+    if (post.user.equals(req.user._id)) {
       await Post.findByIdAndRemove(req.params.id);
       res.status(200);
       res.json(post);

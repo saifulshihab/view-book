@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   CommentOutlined,
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
-  LikeFilled,
-  LikeOutlined,
+  HddOutlined,
+  HeartFilled,
+  SaveOutlined,
+  SendOutlined,
   ShareAltOutlined,
+  SwitcherOutlined,
 } from '@ant-design/icons';
 import { Alert, Card, Dropdown, Menu, Spin, Typography } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
@@ -19,7 +22,6 @@ const { Title } = Typography;
 
 const UserPosts = ({ userId }) => {
   const dispatch = useDispatch();
-  const [liked, setLiked] = useState(false);
 
   const auth = useSelector((state) => state.auth);
   const { userInfo } = auth;
@@ -55,62 +57,63 @@ const UserPosts = ({ userId }) => {
             key={post._id}
             size="small"
             bordered={true}
-            cover={
-              post.image && (
-                <img
-                  alt="example"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                />
-              )
-            }
+            cover={post.image && <img alt="example" src={post.image} />}
             actions={[
-              liked ? (
-                <span style={{ display: 'inline-block' }}>
-                  <LikeFilled
-                    style={{ color: '#1890ff' }}
-                    onClick={() => setLiked(false)}
-                  />
-                  <span style={{ marginLeft: '5px' }}>{post.like}</span>
-                </span>
-              ) : (
-                <span style={{ display: 'inline-block' }}>
-                  <LikeOutlined
-                    style={{}}
-                    onClick={() => setLiked(true)}
-                    key="like"
-                  />
-                  <span style={{ marginLeft: '5px' }}>{post.like}</span>
-                </span>
-              ),
+              <span style={{ display: 'inline-block' }}>
+                <HeartFilled style={{ color: '#1890ff' }} />
+                <span style={{ marginLeft: '5px' }}>{post.like}</span>
+              </span>,
+
               <CommentOutlined key="comment" />,
               <ShareAltOutlined key="share" />,
-              <>
-                {userInfo && userInfo._id === userId && (
-                  <Dropdown
-                    overlay={
-                      <Menu>
-                        <Menu.Item key="1" onClick={() => alert('Hi')}>
-                          <EditOutlined /> Edit
-                        </Menu.Item>
-                        <Menu.Item
-                          key="2"
-                          onClick={() => postDeleteHandler(post._id)}
-                        >
-                          <DeleteOutlined /> Delete
-                        </Menu.Item>
-                      </Menu>
-                    }
-                  >
-                    <a
-                      href="/"
-                      className="ant-dropdown-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <EllipsisOutlined />
-                    </a>
-                  </Dropdown>
-                )}
-              </>,
+
+              <Dropdown
+                overlay={
+                  <Menu>
+                    {userInfo && userInfo._id === userId && (
+                      <Menu.Item key="1" onClick={() => alert('Hi')}>
+                        <EditOutlined /> Edit Post
+                      </Menu.Item>
+                    )}
+                    {userInfo && userInfo._id === userId && (
+                      <Menu.Item
+                        key="2"
+                        onClick={() => postDeleteHandler(post._id)}
+                      >
+                        <DeleteOutlined /> Delete
+                      </Menu.Item>
+                    )}
+                    {userInfo && userInfo._id === userId && (
+                      <Menu.Item
+                        key="3"
+                        onClick={() => postDeleteHandler(post._id)}
+                      >
+                        <HddOutlined /> Hide from timeline
+                      </Menu.Item>
+                    )}
+                    <Menu.Item key="4" onClick={() => alert('Hi')}>
+                      <SaveOutlined /> Save Post
+                    </Menu.Item>
+                    <Menu.Item key="5" onClick={() => alert('Hi')}>
+                      <HddOutlined /> Hide Post
+                    </Menu.Item>
+                    <Menu.Item key="6" onClick={() => alert('Hi')}>
+                      <SendOutlined /> Unfollow {post.user.full_name}
+                    </Menu.Item>
+                    <Menu.Item key="7" onClick={() => alert('Hi')}>
+                      <SwitcherOutlined /> Turn on notification for this post
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <a
+                  href="/"
+                  className="ant-dropdown-link"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <EllipsisOutlined />
+                </a>
+              </Dropdown>,
             ]}
           >
             <Meta
@@ -129,8 +132,12 @@ const UserPosts = ({ userId }) => {
                       second: 'numeric',
                     }).format(new Date(post.createdAt))}
                   </Title>
-                  {!post.image && (
+                  {!post.image ? (
                     <Title className="post_caption" level={3}>
+                      {post.caption}
+                    </Title>
+                  ) : (
+                    <Title className="post_caption" level={4}>
                       {post.caption}
                     </Title>
                   )}

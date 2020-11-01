@@ -171,12 +171,15 @@ body {
   width: 100%;
   margin: 10px 0;
 }
-.postactions_btns button {
-  margin-right: 6px;
-}
+ 
 .postactions_btns,
 .post_btn {
   display: inline-block;
+}
+.upload_btn{
+  display: inline-block;
+  margin-right: 6px;
+  float: left;
 }
 .post_btn {
   float: right;

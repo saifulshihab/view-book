@@ -1,14 +1,10 @@
-import React, { useEffect } from 'react';
-import { Button, Card, Col, Input, Row, Spin, Form, Alert } from 'antd';
-import {
-  FileImageOutlined,
-  FolderAddOutlined,
-  GifOutlined,
-} from '@ant-design/icons';
-import { getPublicPostsAction } from '../Redux/actions/postAction';
-
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Col, Input, Row, Spin, Form, Upload } from 'antd';
+import { FileImageOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { postSubmitAction } from '../Redux/actions/postAction';
+import { getPublicPostsAction } from '../Redux/actions/postAction';
 
 import PublicPosts from '../Screens/PublicPosts';
 
@@ -19,8 +15,8 @@ const NewsFeed = () => {
   const postSubmit = useSelector((state) => state.postSubmit);
   const { success } = postSubmit;
 
-  const getPublicPosts = useSelector((state) => state.getPublicPosts);
-  const { loading, error, posts } = getPublicPosts;
+  const [uploading, setUploading] = useState(false);
+  const [postImage, setPostImage] = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,11 +27,41 @@ const NewsFeed = () => {
     dispatch(
       postSubmitAction({
         caption: values.caption,
+        image: postImage,
       })
     );
-
     form.resetFields();
   };
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+    setUploading(true);
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const { data } = await axios.post('/upload', formData, config);
+
+      setPostImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
+
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
+
   return (
     <div className="newsfeed">
       <Card
@@ -49,7 +75,11 @@ const NewsFeed = () => {
       >
         <Row>
           <Col span={24}>
-            <Form style={{ width: '100%' }} onFinish={submitHandler}>
+            <Form
+              form={form}
+              style={{ width: '100%' }}
+              onFinish={submitHandler}
+            >
               <Form.Item name="caption">
                 <Input
                   size="large"
@@ -59,9 +89,20 @@ const NewsFeed = () => {
               </Form.Item>
               <div className="postactions">
                 <div className="postactions_btns">
-                  <Button shape="circle" icon={<FileImageOutlined />} />
-                  <Button shape="circle" icon={<FolderAddOutlined />} />
-                  <Button shape="circle" icon={<GifOutlined />} />
+                  <Form.Item
+                    name="image"
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
+                    onChange={uploadFileHandler}
+                  >
+                    <Upload>
+                      <Button
+                        listtype="picture"
+                        icon={<FileImageOutlined />}
+                      ></Button>
+                    </Upload>
+                  </Form.Item>
+                  {uploading && <Spin />}
                 </div>
                 <div className="post_btn">
                   <Button htmlType="submit" type="primary">
@@ -74,13 +115,7 @@ const NewsFeed = () => {
         </Row>
       </Card>
       <div className="public_posts">
-        {loading ? (
-          <Spin />
-        ) : error ? (
-          <Alert message={error} type="error" showIcon />
-        ) : (
-          <PublicPosts posts={posts} />
-        )}
+        <PublicPosts />
       </div>
     </div>
   );
