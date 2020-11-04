@@ -1,17 +1,16 @@
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
 import PassportLocal from 'passport-local-mongoose';
 
-const SocialSchema = new Schema({
+const SocialSchema = new mongoose.Schema({
   platform: {
-    type: String
+    type: String,
   },
   link: {
     type: String,
     required: true,
   },
 });
-const EduSchema = new Schema({
+const EduSchema = new mongoose.Schema({
   institute: {
     type: String,
     required: true,
@@ -28,10 +27,34 @@ const EduSchema = new Schema({
   present: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
-const UserSchema = new Schema(
+const FollowersSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const FollowingSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const UserSchema = new mongoose.Schema(
   {
     full_name: {
       type: String,
@@ -61,14 +84,8 @@ const UserSchema = new Schema(
     },
     social: [SocialSchema],
     education: [EduSchema],
-    following: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    follower: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
+    following: [FollowingSchema],
+    followers: [FollowersSchema],
   },
   {
     timestamps: true,

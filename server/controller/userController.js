@@ -70,7 +70,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findOne({ username: req.params.username });
   if (user) {
     res.status(200);
-    res.json(user);
+    res.json(user.populate('following'));
   } else {
     res.status(404);
     throw new Error('User not Found!');
@@ -132,6 +132,50 @@ const updateUserDp = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserList = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  if (users) {
+    res.status(200);
+    res.json(users);
+  } else {
+    res.status(404);
+    throw new Error('User not Found!');
+  }
+});
+
+const followOthers = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    if (req.user._id.equals(user._id)) {
+      res.status(404);
+      throw new Error('You can not follow yourself!');
+    } else {
+      let follow = false;
+      user.followers.find((x) => {
+        if (x.user.toString() === req.user._id.toString()) {
+          follow = true;
+        }
+      });
+      console.log(follow);
+      if (follow === true) {
+        res.status(404);
+        throw new Error('You are already following this person!');
+      } else {
+        const reqUser = await User.findById(req.user._id);
+        reqUser.following.push({ user: user._id });
+        reqUser.save();
+        user.followers.push({ user: req.user._id });
+        user.save();
+        res.status(200);
+        res.json(user.populate('followers').populate('user'));
+      }
+    }
+  } else {
+    res.status(404);
+    throw new Error('User not Found!');
+  }
+});
+
 export {
   updateUserCover,
   userRegisterController,
@@ -139,4 +183,6 @@ export {
   getUserProfile,
   userProfileUpdate,
   updateUserDp,
+  getUserList,
+  followOthers,
 };
