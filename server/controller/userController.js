@@ -70,7 +70,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findOne({ username: req.params.username });
   if (user) {
     res.status(200);
-    res.json(user.populate('following'));
+    res.json(user);
   } else {
     res.status(404);
     throw new Error('User not Found!');
@@ -145,14 +145,16 @@ const getUserList = asyncHandler(async (req, res) => {
 
 const followOthers = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
+  const reqUser = await User.findById(req.user._id);
+
   if (user) {
-    if (req.user._id.equals(user._id)) {
+    if (reqUser._id.equals(user._id)) {
       res.status(404);
       throw new Error('You can not follow yourself!');
     } else {
       let follow = false;
       user.followers.find((x) => {
-        if (x.user.toString() === req.user._id.toString()) {
+        if (x.username.toString() === reqUser.username.toString()) {
           follow = true;
         }
       });
@@ -161,13 +163,25 @@ const followOthers = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('You are already following this person!');
       } else {
-        const reqUser = await User.findById(req.user._id);
-        reqUser.following.push({ user: user._id });
+        reqUser.following.push({
+          userId: user._id,
+          username: user.username,
+          full_name: user.full_name,
+          dp: user.dp,
+        });
         reqUser.save();
-        user.followers.push({ user: req.user._id });
+
+        user.followers.push({
+          userId: reqUser._id,
+          username: reqUser.username,
+          full_name: reqUser.full_name,
+          dp: reqUser.dp,
+        });
+
         user.save();
+
         res.status(200);
-        res.json(user.populate('followers').populate('user'));
+        res.json(user);
       }
     }
   } else {

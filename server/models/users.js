@@ -32,9 +32,20 @@ const EduSchema = new mongoose.Schema({
 
 const FollowersSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+    userId: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    full_name: {
+      type: String,
+      required: true,
+    },
+    dp: {
+      type: String,
     },
   },
   {
@@ -44,9 +55,20 @@ const FollowersSchema = new mongoose.Schema(
 
 const FollowingSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+    userId: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    full_name: {
+      type: String,
+      required: true,
+    },
+    dp: {
+      type: String,
     },
   },
   {
