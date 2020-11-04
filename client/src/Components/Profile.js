@@ -207,9 +207,7 @@ function Profile({ username }) {
                 <p className="views">Views: {user.view}</p>
               </div>
             </div>
-            {dpupdateError && (
-              <Alert type="error" message={dpupdateError} showIcon closable />
-            )}
+
             <Row>
               {/* <Col span={1}></Col> */}
               <Col span={9}>
@@ -452,6 +450,9 @@ function Profile({ username }) {
               </Button>
             </Form.Item>
           </Form>
+          {dpupdateError && (
+            <Alert type="error" message={dpupdateError} showIcon closable />
+          )}
         </Modal>
         <Modal
           title="Update Cover"
@@ -487,6 +488,9 @@ function Profile({ username }) {
               </Button>
             </Form.Item>
           </Form>
+          {coverupdateError && (
+            <Alert type="error" message={coverupdateError} showIcon closable />
+          )}
         </Modal>
       </div>
     )

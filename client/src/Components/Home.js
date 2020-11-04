@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, withRouter, Link, Redirect } from 'react-router-dom';
-import { Row, Col, Menu, List, Avatar, Button, Spin, Alert } from 'antd';
+import { Row, Col, Menu, List, Button, Spin, Alert } from 'antd';
 import {
   MessageOutlined,
   HomeOutlined,
@@ -18,21 +18,8 @@ import { logoutUser } from '../Redux/actions/userAction';
 import { getProfileInfoUser } from '../Redux/actions/userAction';
 import UserProfileVisitScreen from '../Screens/UserProfileVisitScreen';
 import PostDetailsScreen from '../Screens/PostDetailsScreen';
-
-const data = [
-  {
-    title: 'Brad Traversy',
-  },
-  {
-    title: 'Fireship.io',
-  },
-  {
-    title: 'Ben Awad',
-  },
-  {
-    title: 'Maximaz Shwarznagger',
-  },
-];
+import ChatListScreen from '../Screens/ChatListScreen';
+import PeopleListScreen from '../Screens/PeopleListScreen';
 
 function Home() {
   const dispatch = useDispatch();
@@ -121,34 +108,34 @@ function Home() {
           </Col>
           <Col span={7}>
             <div className="right_sidebar">
-              <div className="profile__btn">
-                {user.dp ? (
-                  <img src={user.dp} alt={user.full_name} />
-                ) : (
-                  <img src="/" alt={user.username} />
-                )}
-                <div className="fullname">
-                  <Link to="/profile">
-                    <Button type="link">
-                      {user.full_name && user.full_name}
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-              <div className="chats_wrap">
-                <List
-                  itemLayout="horizontal"
-                  dataSource={data}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <List.Item.Meta
-                        avatar={<Avatar src="" />}
-                        title={<a href="/">{item.title}</a>}
-                      />
-                    </List.Item>
-                  )}
-                />
-              </div>
+              <List itemLayout="vertical">
+                <List.Item>
+                  <div className="profile__btn">
+                    {user.dp ? (
+                      <img src={user.dp} alt={user.full_name} />
+                    ) : (
+                      <img src="/" alt={user.username} />
+                    )}
+                    <div className="fullname">
+                      <Link to="/profile">
+                        <Button type="link">
+                          {user.full_name && user.full_name}
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </List.Item>
+                <List.Item>
+                  <div className="chats_wrap">
+                    <ChatListScreen />
+                  </div>
+                </List.Item>
+                <List.Item>
+                  <div className="whotofollow_wrap">
+                    <PeopleListScreen />
+                  </div>
+                </List.Item>
+              </List>
             </div>
           </Col>
         </Row>

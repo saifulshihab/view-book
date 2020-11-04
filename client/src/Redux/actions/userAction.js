@@ -24,6 +24,9 @@ import {
   SIGNUP_FAILED,
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAILED,
 } from '../ActionTypes';
 
 export const loginUser = (creds) => async (dispatch) => {
@@ -264,6 +267,39 @@ export const updateProfileCover = (cover) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: PROFILE_COVER_UPDATE_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//GET users list
+export const listUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_LIST_REQUEST,
+    });
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`users/`, config);
+
+    dispatch({
+      type: USER_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_LIST_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
