@@ -12,6 +12,7 @@ import {
   updateUserDp,
   getUserList,
   followOthers,
+  unfollowOthers,
 } from '../controller/userController.js';
 
 // router.options('*', cors, corsWithOptions, (req, res) => {
@@ -37,5 +38,6 @@ router.route('/').get(verifyUser, getUserList);
 //Follow Others
 
 router.route('/:id/follow').post(verifyUser, followOthers);
+router.route('/:id/unfollow').delete(verifyUser, unfollowOthers);
 
 export default router;

@@ -2,6 +2,7 @@ import passport from 'passport';
 import User from '../models/users.js';
 import asyncHandler from 'express-async-handler';
 import { getToken } from '../authenticate.js';
+import _ from 'lodash';
 
 const userRegisterController = (req, res) => {
   User.register(
@@ -29,7 +30,7 @@ const userRegisterController = (req, res) => {
             res.json({
               success: true,
               status: 'Registration Successfull!',
-              user: user,
+              /* user: user, */
             });
           });
         });
@@ -153,12 +154,12 @@ const followOthers = asyncHandler(async (req, res) => {
       throw new Error('You can not follow yourself!');
     } else {
       let follow = false;
-      user.followers.find((x) => {
-        if (x.username.toString() === reqUser.username.toString()) {
+      user.followers.map((x) => {
+        if (x.userId.toString() === reqUser._id.toString()) {
           follow = true;
         }
       });
-      console.log(follow);
+
       if (follow === true) {
         res.status(404);
         throw new Error('You are already following this person!');
@@ -178,12 +179,42 @@ const followOthers = asyncHandler(async (req, res) => {
           dp: reqUser.dp,
         });
 
-        user.save();
+        await user.save();
 
         res.status(200);
-        res.json(user);
+        res.json({
+          status: 'ok',
+          message: `You are following ${user.full_name}`,
+        });
       }
     }
+  } else {
+    res.status(404);
+    throw new Error('User not Found!');
+  }
+});
+
+const unfollowOthers = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  const reqUser = await User.findById(req.user._id);
+
+  if (user) {
+    const reqUserIdx = _.findIndex(reqUser.following, function (o) {
+      return o.userId === req.params.id;
+    });
+    const userUserIdx = _.findIndex(user.followers, function (o) {
+      return o.userId === req.user._id;
+    });
+
+    reqUser.following.splice(reqUserIdx, 1);
+
+    user.followers.splice(userUserIdx, 1);
+
+    await reqUser.save();
+    await user.save();
+
+    res.status(200);
+    res.json(reqUser);
   } else {
     res.status(404);
     throw new Error('User not Found!');
@@ -199,4 +230,5 @@ export {
   updateUserDp,
   getUserList,
   followOthers,
+  unfollowOthers,
 };
