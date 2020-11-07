@@ -1,17 +1,20 @@
 import React from 'react';
-import { Form, Input, Button, Alert, Select, Tooltip, Spin } from 'antd';
+import { Form, Input, Button, Alert, Select, Tooltip } from 'antd';
 import { FacebookFilled, GoogleOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { signupUser } from '../Redux/actions/userAction';
+import Loader from './Loader';
 
 const { Option } = Select;
 
-function Signup(props) {
+function Signup() {
   const dispatch = useDispatch();
   const signup = useSelector((state) => state.signup);
 
   const { loading, error, success } = signup;
+
+  const [form] = Form.useForm();
 
   const registartionHandler = (values) => {
     dispatch(
@@ -23,6 +26,7 @@ function Signup(props) {
         gender: values.gender,
       })
     );
+    form.resetFields();
   };
 
   return (
@@ -31,6 +35,7 @@ function Signup(props) {
         <div className="login_wrap">
           <h1>Registration</h1>
           <Form
+            form={form}
             name="normal_login"
             className="login-form"
             onFinish={registartionHandler}
@@ -115,7 +120,7 @@ function Signup(props) {
             <Link to="/login">
               <Button type="link">Login now!</Button>
             </Link>
-            {loading && <Spin />}
+            {loading && <Loader />}
             {success && (
               <Alert
                 message={'Registration Successfull!'}
