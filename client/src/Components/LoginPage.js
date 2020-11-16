@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button, Alert, Spin } from 'antd';
+import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../Redux/actions/userAction';
+import Loader from './Loader';
 
 function Login({ history }) {
   // let location = useLocation();
@@ -78,7 +79,7 @@ function Login({ history }) {
               <Button type="link">Register now!</Button>
             </Link>
           </Form.Item>
-          {loading && <Spin size="small" />}
+          {loading && <Loader />}
           {error && (
             <Alert
               message={'Invalid Username or Password!'}

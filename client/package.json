@@ -10,6 +10,8 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.7.0",
     "axios": "^0.21.0",
+    "loadash": "^1.0.0",
+    "moment": "^2.29.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",

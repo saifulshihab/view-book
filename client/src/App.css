@@ -7,6 +7,9 @@ body {
 .ant-input {
   border-radius: 40px !important;
 }
+.loader {
+  text-align: center;
+}
 .header {
   width: 100%;
   padding: 8px;
@@ -22,7 +25,7 @@ body {
   z-index: -999;
 }
 .left_sidebar {
-  left: 14%;
+  left: 14.2%;
   height: 100vh;
   float: right;
   width: 15%;
@@ -216,10 +219,12 @@ body {
 .post_time {
   font-weight: 400 !important;
   font-size: 12px !important;
-  color: #aaaaaa !important;
+  color: #737373 !important;
   margin-top: -10px !important;
 }
-
+.whotofollow_wrap {
+  height: 40vh;
+}
 .chats_wrap,
 .whotofollow_wrap {
   background-color: white;
@@ -235,4 +240,21 @@ body {
 .chats_wrap .ant-list-item,
 .whotofollow_wrap .ant-list-item {
   padding: 0px !important;
+}
+.whotofollow_body {
+  height: 30vh;
+  overflow: hidden;
+}
+.following_list_wrapper {
+  padding: 5px;
+}
+.following_list_header h2 {
+  background-color: white;
+  padding: 15px !important;
+  box-shadow: 1px 2px 2px #ddd;
+}
+.following_list_item {
+  background-color: white;
+  padding: 5px 15px !important;
+  border-bottom: 1px solid #f0f0f0 !important;
 }

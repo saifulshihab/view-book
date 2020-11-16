@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, Button, Col, Row, Spin } from 'antd';
+import { Alert, Button, Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   EditOutlined,
@@ -12,6 +12,7 @@ import {
 import PublicPosts from './UserPosts';
 import { getProfileInfoPublic } from '../Redux/actions/userAction';
 import { baseURL } from '../shared/baseURL';
+import Loader from '../Components/Loader';
 // import { PROFILE_FETCH_PUBLIC_RESET } from '../Redux/ActionTypes';
 
 const UserProfileVisitScreen = ({ match }) => {
@@ -29,7 +30,7 @@ const UserProfileVisitScreen = ({ match }) => {
     <Row>
       <Col span="24">
         {loading ? (
-          <Spin />
+          <Loader large />
         ) : error ? (
           <Alert type="error" message={error} showIcon />
         ) : (
@@ -37,20 +38,14 @@ const UserProfileVisitScreen = ({ match }) => {
             <div className="_pro_dp_wrapper">
               <div className="profile_cover">
                 {userPublic.cover ? (
-                  <img
-                    alt={userPublic.username}
-                    src={userPublic.cover}
-                  />
+                  <img alt={userPublic.username} src={userPublic.cover} />
                 ) : (
                   <img src="" alt="" />
                 )}
               </div>
               <div className="dp">
                 {userPublic.dp ? (
-                  <img
-                    alt={userPublic.username}
-                    src={userPublic.dp}
-                  />
+                  <img alt={userPublic.username} src={userPublic.dp} />
                 ) : (
                   <img src="" alt="" />
                 )}

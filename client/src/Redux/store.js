@@ -10,6 +10,8 @@ import {
   profileInfoPublicReducer,
   profileDpUpdateReducer,
   userListReducer,
+  followOtherReducer,
+  unfollowOtherReducer
 } from '../Redux/reducer/userReducer';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -37,6 +39,8 @@ const reducer = combineReducers({
   profileDpUpdate: profileDpUpdateReducer,
   profileCoverUpdate: profileCoverUpdateReducer,
   usersList: userListReducer,
+  followingOthers: followOtherReducer,
+  unfollowingOthers: unfollowOtherReducer,
 });
 
 const initialState = {

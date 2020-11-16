@@ -30,6 +30,14 @@ import {
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
   USER_LIST_FAILED,
+  FOLLOW_OTHERS_REQUEST,
+  FOLLOW_OTHERS_SUCCESS,
+  FOLLOW_OTHERS_FAILED,
+  FOLLOW_OTHERS_RESET,
+  UNFOLLOW_OTHERS_REQUEST,
+  UNFOLLOW_OTHERS_SUCCESS,
+  UNFOLLOW_OTHERS_FAILED,
+  UNFOLLOW_OTHERS_RESET,
 } from '../ActionTypes';
 
 export const AuthReducer = (state = {}, action) => {
@@ -168,6 +176,36 @@ export const userListReducer = (state = { users: [] }, action) => {
       return { loading: false, users: action.payload };
     case USER_LIST_FAILED:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const followOtherReducer = (state = {}, action) => {
+  switch (action.type) {
+    case FOLLOW_OTHERS_REQUEST:
+      return { loading: true };
+    case FOLLOW_OTHERS_SUCCESS:
+      return { loading: false, success: true };
+    case FOLLOW_OTHERS_FAILED:
+      return { loading: false, error: action.payload };
+    case FOLLOW_OTHERS_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const unfollowOtherReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UNFOLLOW_OTHERS_REQUEST:
+      return { loading: true };
+    case UNFOLLOW_OTHERS_SUCCESS:
+      return { loading: false, success: true };
+    case UNFOLLOW_OTHERS_FAILED:
+      return { loading: false, error: action.payload };
+    case UNFOLLOW_OTHERS_RESET:
+      return {};
     default:
       return state;
   }

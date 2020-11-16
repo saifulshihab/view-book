@@ -27,6 +27,12 @@ import {
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
   USER_LIST_FAILED,
+  FOLLOW_OTHERS_REQUEST,
+  FOLLOW_OTHERS_SUCCESS,
+  FOLLOW_OTHERS_FAILED,
+  UNFOLLOW_OTHERS_REQUEST,
+  UNFOLLOW_OTHERS_FAILED,
+  UNFOLLOW_OTHERS_SUCCESS,
 } from '../ActionTypes';
 
 export const loginUser = (creds) => async (dispatch) => {
@@ -300,6 +306,72 @@ export const listUsers = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_LIST_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//Unfollow others
+export const followOthers = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: FOLLOW_OTHERS_REQUEST,
+    });
+
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.post(`users/${id}/follow`, config);
+
+    dispatch({
+      type: FOLLOW_OTHERS_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: FOLLOW_OTHERS_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//Unfollow others
+export const unfollowOthers = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: UNFOLLOW_OTHERS_REQUEST,
+    });
+
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.delete(`users/${id}/unfollow`, config);
+
+    dispatch({
+      type: UNFOLLOW_OTHERS_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: UNFOLLOW_OTHERS_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Input, Row, Spin, Form, Upload } from 'antd';
+import { Button, Card, Col, Input, Row, Form, Upload } from 'antd';
 import { FileImageOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import { postSubmitAction } from '../Redux/actions/postAction';
 import { getPublicPostsAction } from '../Redux/actions/postAction';
 
 import PublicPosts from '../Screens/PublicPosts';
+import Loader from './Loader';
 
 const NewsFeed = () => {
   const dispatch = useDispatch();
@@ -99,7 +100,7 @@ const NewsFeed = () => {
                       ></Button>
                     </Upload>
                   </Form.Item>
-                  {uploading && <Spin />}
+                  {uploading && <Loader small ind />}
                 </div>
                 <div className="post_btn">
                   <Button htmlType="submit" type="primary">

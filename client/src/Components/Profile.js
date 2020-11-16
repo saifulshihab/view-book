@@ -10,7 +10,6 @@ import {
   Input,
   Select,
   Alert,
-  Spin,
   Upload,
   Image,
 } from 'antd';
@@ -21,6 +20,7 @@ import {
   HeartOutlined,
   InstagramOutlined,
   MailOutlined,
+  UserSwitchOutlined,
   WifiOutlined,
 } from '@ant-design/icons';
 import {
@@ -37,6 +37,8 @@ import {
   PROFILE_FETCH_USER_RESET,
   PROFILE_UPDATE_RESET,
 } from '../Redux/ActionTypes';
+import { Link } from 'react-router-dom';
+import Loader from './Loader';
 
 const { Option } = Select;
 
@@ -86,6 +88,7 @@ function Profile({ username }) {
       dispatch({ type: PROFILE_COVER_UPDATE_RESET });
       dispatch(getProfileInfoUser(username));
     }
+    window.scrollTo(0, 0);
   }, [
     dispatch,
     username,
@@ -166,7 +169,7 @@ function Profile({ username }) {
   };
 
   return userInfoLoading ? (
-    <Spin />
+    <Loader large />
   ) : userInfoError ? (
     <Alert message={userInfoError} showIcon type="error" />
   ) : (
@@ -213,7 +216,7 @@ function Profile({ username }) {
               <Col span={9}>
                 <h2 className="user_post_heading_h1">Intro</h2>
                 {loadingProfileEdit ? (
-                  <Spin />
+                  <Loader />
                 ) : (
                   <div className="pro_info_2_wrapper">
                     <div className="pro_info_2">
@@ -253,6 +256,22 @@ function Profile({ username }) {
                           <span>{user.relationship && user.relationship}</span>
                         </li>
                       </ul>
+                      <div className="pro_info_3">
+                        <ul>
+                          <Link to={`/followers`}>
+                            <li>
+                              <UserSwitchOutlined /> {user.followers.length}{' '}
+                              Followers
+                            </li>
+                          </Link>
+                          <Link to={'/following'}>
+                            <li>
+                              <UserSwitchOutlined /> {user.following.length}{' '}
+                              Following
+                            </li>
+                          </Link>
+                        </ul>
+                      </div>
                     </div>
                     <Button type="primary" block>
                       View Details

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, withRouter, Link, Redirect } from 'react-router-dom';
-import { Row, Col, Menu, List, Button, Spin, Alert } from 'antd';
+import { Row, Col, Menu, List, Button, Alert } from 'antd';
 import {
   MessageOutlined,
   HomeOutlined,
@@ -10,7 +10,6 @@ import {
 
 import Profile from './Profile';
 import Settings from './Settings';
-import { baseURL } from '../shared/baseURL';
 import NewsFeed from './NewsFeed';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from './Header';
@@ -19,7 +18,11 @@ import { getProfileInfoUser } from '../Redux/actions/userAction';
 import UserProfileVisitScreen from '../Screens/UserProfileVisitScreen';
 import PostDetailsScreen from '../Screens/PostDetailsScreen';
 import ChatListScreen from '../Screens/ChatListScreen';
-import PeopleListScreen from '../Screens/PeopleListScreen';
+import WhoToFollowScreen from '../Screens/WhoToFollowList';
+import FollowingScreen from '../Screens/FollowingScreen';
+import FollowersScreen from '../Screens/FollowersScreen';
+import Loader from './Loader';
+import UsersListScreen from '../Screens/UsersListScreen';
 
 function Home() {
   const dispatch = useDispatch();
@@ -58,7 +61,7 @@ function Home() {
     <div>
       <Header />
       {loading ? (
-        <Spin size="large" />
+        <Loader large />
       ) : error ? (
         <Alert type="error" message={error} showIcon closable />
       ) : (
@@ -103,6 +106,17 @@ function Home() {
                 path="/user/post/:postId"
                 component={PostDetailsScreen}
               />
+              <PrivateRoute
+                path="/followers"
+                exact
+                component={FollowersScreen}
+              />
+              <PrivateRoute
+                path="/following"
+                exact
+                component={FollowingScreen}
+              />
+              <PrivateRoute path="/people" exact component={UsersListScreen} />
               <Redirect to="/newsfeed" />
             </Switch>
           </Col>
@@ -132,7 +146,7 @@ function Home() {
                 </List.Item>
                 <List.Item>
                   <div className="whotofollow_wrap">
-                    <PeopleListScreen />
+                    <WhoToFollowScreen />
                   </div>
                 </List.Item>
               </List>

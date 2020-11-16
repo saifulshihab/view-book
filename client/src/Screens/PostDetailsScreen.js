@@ -21,19 +21,19 @@ import {
   Input,
   Menu,
   Avatar,
-  Spin,
   Typography,
   Upload,
   Modal,
   Form,
   Image,
-  message,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { detailsPost } from '../Redux/actions/postAction';
-import { baseURL } from '../shared/baseURL';
 import { editPost, deletePost } from '../Redux/actions/postAction';
-import { POST_DETAILS_RESET, POST_EDIT_RESET } from '../Redux/ActionTypes';
+import { POST_EDIT_RESET } from '../Redux/ActionTypes';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
+import Loader from '../Components/Loader';
 
 const { Title } = Typography;
 
@@ -63,6 +63,7 @@ const PostDetailsScreen = ({ history, match }) => {
   const { success: editSuccess, error: editError } = postEdit;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (editSuccess) {
       dispatch({ type: POST_EDIT_RESET });
       dispatch(detailsPost(postId));
@@ -121,7 +122,7 @@ const PostDetailsScreen = ({ history, match }) => {
     );
   };
   return loading ? (
-    <Spin />
+    <Loader ind />
   ) : error ? (
     <Alert message={error} type="error" showIcon />
   ) : (
@@ -196,16 +197,23 @@ const PostDetailsScreen = ({ history, match }) => {
         ]}
       >
         <Meta
-          avatar={<Avatar src={post.user.dp &&  post.user.dp} />}
-          title={post.user.full_name}
+          avatar={<Avatar src={post.user.dp && post.user.dp} />}
+          title={
+            <Link to={`/user/${post.user.username}`} style={{ color: 'black' }}>
+              {post.user.full_name}
+            </Link>
+          }
           description={
             <>
+              <Title className="post_time">
+                {moment(post.createdAt).fromNow(true)}
+              </Title>
               {!post.image ? (
                 <Title className="post_caption" level={3}>
                   {post.caption}
                 </Title>
               ) : (
-                <Title className="post_caption" level={4}>
+                <Title className="post_caption" style={{ fontSize: '14px' }}>
                   {post.caption}
                 </Title>
               )}
@@ -239,7 +247,7 @@ const PostDetailsScreen = ({ history, match }) => {
               <Button listtype="picture" icon={<FileImageOutlined />}></Button>
             </Upload>
           </Form.Item>
-          {uploading && <Spin />}
+          {uploading && <Loader ind />}
           <Form.Item>
             <Button onClick={postUpdateHandler} type="dashed" block>
               Update

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { Alert, Card, Dropdown, Menu, Spin, Typography } from 'antd';
+import { Alert, Card, Dropdown, Menu, Typography } from 'antd';
+import moment from 'moment';
 import {
   CommentOutlined,
   DeleteOutlined,
@@ -18,6 +19,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { deletePost } from '../Redux/actions/postAction';
 import { getPublicPostsAction } from '../Redux/actions/postAction';
+import Loader from '../Components/Loader';
 
 const { Meta } = Card;
 const { Title } = Typography;
@@ -43,7 +45,7 @@ const PublicPosts = () => {
   return (
     <>
       {loading ? (
-        <Spin />
+        <Loader large />
       ) : error ? (
         <Alert type="error" message={error} showIcon />
       ) : (
@@ -72,8 +74,10 @@ const PublicPosts = () => {
                 overlay={
                   <Menu>
                     {userInfo && userInfo._id === post.user._id && (
-                      <Menu.Item key="1" onClick={() => alert('Hi')}>
-                        <EditOutlined /> Edit Post
+                      <Menu.Item key="1">
+                        <Link to={`/user/post/${post._id}`}>
+                          <EditOutlined /> Edit Post
+                        </Link>
                       </Menu.Item>
                     )}
                     {userInfo && userInfo._id === post.user._id && (
@@ -135,15 +139,7 @@ const PublicPosts = () => {
               description={
                 <>
                   <Title className="post_time">
-                    {new Intl.DateTimeFormat('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: '2-digit',
-                      hour12: true,
-                      hour: 'numeric',
-                      minute: 'numeric',
-                      second: 'numeric',
-                    }).format(new Date(post.createdAt))}
+                    {moment(post.createdAt).fromNow(true)}
                   </Title>
                   {!post.image ? (
                     <Link to={`/user/post/${post._id}`}>
@@ -153,7 +149,10 @@ const PublicPosts = () => {
                     </Link>
                   ) : (
                     <Link to={`/user/post/${post._id}`}>
-                      <Title className="post_caption" level={4}>
+                      <Title
+                        className="post_caption"
+                        style={{ fontSize: '14px' }}
+                      >
                         {post.caption}
                       </Title>
                     </Link>

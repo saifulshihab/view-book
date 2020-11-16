@@ -12,12 +12,13 @@ import {
   ShareAltOutlined,
   SwitcherOutlined,
 } from '@ant-design/icons';
-import { Alert, Card, Dropdown, Menu, Spin, Typography } from 'antd';
+import { Alert, Card, Dropdown, Menu, Typography } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserPostsAction, deletePost } from '../Redux/actions/postAction';
-import { baseURL } from '../shared/baseURL';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
+import Loader from '../Components/Loader';
 
 const { Meta } = Card;
 const { Title } = Typography;
@@ -44,7 +45,7 @@ const UserPosts = ({ userId }) => {
 
   return (
     <div className="user_personal_post">
-      {loading && <Spin />}
+      {loading && <Loader />}
       {error && <Alert message={error} type="error" showIcon />}
       {deleteError && <Alert message={deleteError} type="error" showIcon />}
       {posts &&
@@ -126,15 +127,7 @@ const UserPosts = ({ userId }) => {
               description={
                 <>
                   <Title className="post_time">
-                    {new Intl.DateTimeFormat('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: '2-digit',
-                      hour12: true,
-                      hour: 'numeric',
-                      minute: 'numeric',
-                      second: 'numeric',
-                    }).format(new Date(post.createdAt))}
+                    {moment(post.createdAt).fromNow(true)}
                   </Title>
                   {!post.image ? (
                     <Link to={`/user/post/${post._id}`}>
@@ -144,7 +137,10 @@ const UserPosts = ({ userId }) => {
                     </Link>
                   ) : (
                     <Link to={`/user/post/${post._id}`}>
-                      <Title className="post_caption" level={4}>
+                      <Title
+                        className="post_caption"
+                        style={{ fontSize: '14px' }}
+                      >
                         {post.caption}
                       </Title>
                     </Link>
