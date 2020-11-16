@@ -15,9 +15,6 @@ import {
   unfollowOthers,
 } from '../controller/userController.js';
 
-// router.options('*', cors, corsWithOptions, (req, res) => {
-//   res.sendStatus(200);
-// });
 //user register
 router.route('/signup').post(userRegisterController);
 
@@ -32,11 +29,11 @@ router
 
 router.route('/:id/cover').put(verifyUser, updateUserCover);
 router.route('/:id/dp').put(verifyUser, updateUserDp);
+
 //Users List
 router.route('/').get(verifyUser, getUserList);
 
 //Follow Others
-
 router.route('/:id/follow').post(verifyUser, followOthers);
 router.route('/:id/unfollow').delete(verifyUser, unfollowOthers);
 

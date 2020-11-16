@@ -170,7 +170,8 @@ const followOthers = asyncHandler(async (req, res) => {
           full_name: user.full_name,
           dp: user.dp,
         });
-        reqUser.save();
+
+        const updatedReqUser = await reqUser.save();
 
         user.followers.push({
           userId: reqUser._id,
@@ -179,13 +180,11 @@ const followOthers = asyncHandler(async (req, res) => {
           dp: reqUser.dp,
         });
 
-        await user.save();
+        const updatedUser = await user.save();
 
-        res.status(200);
-        res.json({
-          status: 'ok',
-          message: `You are following ${user.full_name}`,
-        });
+        if (updatedUser && updatedReqUser) {
+          res.status(201).json(updatedUser);
+        }
       }
     }
   } else {
