@@ -8,6 +8,7 @@ import {
   FileImageOutlined,
   HddOutlined,
   HeartFilled,
+  HeartOutlined,
   SaveOutlined,
   SendOutlined,
   ShareAltOutlined,
@@ -29,11 +30,12 @@ import {
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { detailsPost } from '../Redux/actions/postAction';
-import { editPost, deletePost } from '../Redux/actions/postAction';
+import { editPost, deletePost, likePost, unlikePost } from '../Redux/actions/postAction';
 import { POST_EDIT_RESET } from '../Redux/ActionTypes';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Loader from '../Components/Loader';
+import _ from 'lodash';
 
 const { Title } = Typography;
 
@@ -41,11 +43,11 @@ const { Meta } = Card;
 
 const PostDetailsScreen = ({ history, match }) => {
   const postId = match.params.postId;
-
-  const dispatch = useDispatch();
-
+  const dispatch = useDispatch()
   const auth = useSelector((state) => state.auth);
   const { userInfo } = auth;
+  const [caption, setCaption] = useState('');
+  const [postImage, setPostImage] = useState('');
 
   const postDetails = useSelector((state) => state.postDetails);
   const { loading, error, post } = postDetails;
@@ -54,13 +56,16 @@ const PostDetailsScreen = ({ history, match }) => {
   const [uploading, setUploading] = useState(false);
 
   const postDelete = useSelector((state) => state.postDelete);
-  const { success: deleteSuccess, error: deleteError } = postDelete;
-
-  const [caption, setCaption] = useState('');
-  const [postImage, setPostImage] = useState('');
+  const { success: deleteSuccess, error: deleteError } = postDelete;  
 
   const postEdit = useSelector((state) => state.postEdit);
   const { success: editSuccess, error: editError } = postEdit;
+  
+  const postLike = useSelector((state) => state.postLike);
+  const { success: likeSuccess } = postLike;
+  
+  const postUnLike = useSelector((state) => state.postUnLike);
+  const { success: unlikeSuccess } = postUnLike;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,7 +74,7 @@ const PostDetailsScreen = ({ history, match }) => {
       dispatch(detailsPost(postId));
       setModalOpen(false);
     } else {
-      if (!post.caption || post._id !== postId) {
+      if (!post.caption || post._id !== postId || likeSuccess || unlikeSuccess) {
         window.scrollTo(0, 0);
         dispatch(detailsPost(postId));
       } else {
@@ -77,11 +82,17 @@ const PostDetailsScreen = ({ history, match }) => {
         setPostImage(post.image);
       }
     }
-  }, [dispatch, postId, deleteSuccess, post, editSuccess, history]);
+  }, [dispatch, postId, deleteSuccess, post, editSuccess, history, likeSuccess, unlikeSuccess]);
 
   const postDeleteHandler = (id) => {
     dispatch(deletePost(id));
   };
+  const likePostHandler = (id) => {
+    dispatch(likePost(id))
+  }
+  const unlikePostHandler = (id) => {
+    dispatch(unlikePost(id))
+  }
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
@@ -128,8 +139,7 @@ const PostDetailsScreen = ({ history, match }) => {
   ) : (
     <>
       {deleteError && <Alert message={deleteError} type="error" showIcon />}
-      {editError && <Alert message={editError} type="error" showIcon />}
-      {/* {editSuccess && message.success('Post Updated!')} */}
+      {editError && <Alert message={editError} type="error" showIcon />}      
       <Card
         style={{
           borderRadius: '10px',
@@ -142,11 +152,16 @@ const PostDetailsScreen = ({ history, match }) => {
         bordered={true}
         cover={post.image && <img alt="example" src={post.image} />}
         actions={[
+          userInfo && _.findIndex(post.like, (o) => o.user.toString() === userInfo._id.toString()) >= 0 ?        
           <span style={{ display: 'inline-block' }}>
-            <HeartFilled style={{ color: '#1890ff' }} />
-            <span style={{ marginLeft: '5px' }}>{post.like}</span>
-          </span>,
-
+            <HeartFilled style={{color: "#ff4d4f"}} key="like" onClick={() => unlikePostHandler(post._id)} />
+            <span style={{ marginLeft: '5px' }}>{post.like && post.like.length}</span>
+          </span> : (
+             <span style={{ display: 'inline-block' }}>
+             <HeartOutlined style={{color: "#ff4d4f"}} key="unlike" onClick={() => likePostHandler(post._id)} />
+             <span style={{ marginLeft: '5px' }}>{post.like && post.like.length}</span>
+           </span>
+          ),
           <CommentOutlined key="comment" />,
           <ShareAltOutlined key="share" />,
 

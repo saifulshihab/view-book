@@ -8,6 +8,8 @@ import {
   userPostDelete,
   userPostEdit,
   getPostById,
+  likePost,
+  unlikePost
 } from '../controller/postController.js';
 const router = express.Router();
 
@@ -17,6 +19,10 @@ router
   .route('/:postId')
   .get(verifyUser, getPostById)
   .delete(verifyUser, userPostDelete)
-  .put(verifyUser, userPostEdit);
+  .put(verifyUser, userPostEdit)
+router.route('/:postId/like').put(verifyUser, likePost)
+router.route('/:postId/unlike').put(verifyUser, unlikePost)
+ 
+
 
 export default router;

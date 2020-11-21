@@ -15,6 +15,15 @@ const CommentSchema = mongoose.Schema(
   }
 );
 
+const LikeSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }, 
+  } 
+);
+
 const PostSchema = mongoose.Schema(
   {
     caption: {
@@ -27,10 +36,7 @@ const PostSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    like: {
-      type: Number,
-      default: 0,
-    },
+    like: [LikeSchema],
     comments: [CommentSchema],
   },
   {

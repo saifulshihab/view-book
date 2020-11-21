@@ -1,6 +1,11 @@
 import Post from '../models/posts.js';
 import asyncHandler from 'express-async-handler';
+import _ from 'lodash';
 
+
+// @ GET 
+// @ fetch all posts
+// @ public 
 const fetchAllPost = asyncHandler(async (req, res) => {
   const posts = await Post.find({}).sort({ createdAt: '-1' }).populate('user');
   if (posts) {
@@ -12,6 +17,9 @@ const fetchAllPost = asyncHandler(async (req, res) => {
   }
 });
 
+// @ POST 
+// @ create a post by users
+// @ public 
 const postCreate = asyncHandler(async (req, res) => {
   const { caption, image } = req.body;
   const creaePost = await Post.create({ caption, image, user: req.user });
@@ -25,6 +33,9 @@ const postCreate = asyncHandler(async (req, res) => {
   }
 });
 
+// @ GET 
+// @ get specific user posts
+// @ public 
 const getUserPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({})
     .sort({ createdAt: '-1' })
@@ -40,6 +51,9 @@ const getUserPosts = asyncHandler(async (req, res) => {
   }
 });
 
+// @ GET 
+// @ get specific post
+// @ public 
 const getPostById = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId).populate('user');
   if (post) {
@@ -51,6 +65,9 @@ const getPostById = asyncHandler(async (req, res) => {
   }
 });
 
+// @ DEL 
+// @ delete post
+// @ private 
 const userPostDelete = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId);
   if (post) {
@@ -67,7 +84,9 @@ const userPostDelete = asyncHandler(async (req, res) => {
     throw new Error('Post not found!');
   }
 });
-
+// @ PUT 
+// @ edit post
+// @ private 
 const userPostEdit = asyncHandler(async (req, res) => {
   const { caption, image } = req.body;
   const post = await Post.findById(req.params.postId);
@@ -87,6 +106,59 @@ const userPostEdit = asyncHandler(async (req, res) => {
   }
 });
 
+// @ PUT 
+// @ give like to a post
+// @ public 
+const likePost = asyncHandler(async (req, res) => {  
+  const post = await Post.findById(req.params.postId);
+  if (post) {
+    const newLike = {
+      user: req.user._id
+    }
+    post.like.push(newLike);
+     const updatedPost = await post.save()
+     if(updatedPost){
+      res.json({
+        "status": "ok",
+        "post": updatedPost
+      })
+     }else{
+      res.status(403);
+      throw new Error('Liked failed!');
+     }
+  } else {
+    res.status(404);
+    throw new Error('Post not found!');
+  }
+});
+// @ PUT 
+// @ unlike post
+// @ public 
+const unlikePost = asyncHandler(async (req, res) => {  
+  const post = await Post.findById(req.params.postId);
+  if (post) {
+    const userIdx = _.findIndex(post.like, function (o) {
+      return o.user === req.user._id;
+    });
+
+    post.like.splice(userIdx, 1);
+   
+     const updatedPost = await post.save()
+     if(updatedPost){
+      res.json({
+        "status": "ok",
+        "post": updatedPost
+      })
+     }else{
+      res.status(403);
+      throw new Error('Unliked failed!');
+     }
+  } else {
+    res.status(404);
+    throw new Error('Post not found!');
+  }
+});
+
 export {
   getUserPosts,
   fetchAllPost,
@@ -94,4 +166,6 @@ export {
   userPostDelete,
   userPostEdit,
   getPostById,
+  likePost,
+  unlikePost
 };

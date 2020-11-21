@@ -22,6 +22,8 @@ import {
   postSubmitReducer,
   postDeleteReducer,
   postEditReducer,
+  postLikeReducer,
+  postUnLikeReducer
 } from '../Redux/reducer/postReducers';
 
 const reducer = combineReducers({
@@ -36,6 +38,8 @@ const reducer = combineReducers({
   postSubmit: postSubmitReducer,
   postDelete: postDeleteReducer,
   postEdit: postEditReducer,
+  postLike: postLikeReducer,
+  postUnLike: postUnLikeReducer,
   profileDpUpdate: profileDpUpdateReducer,
   profileCoverUpdate: profileCoverUpdateReducer,
   usersList: userListReducer,

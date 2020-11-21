@@ -1,6 +1,12 @@
 import axios from 'axios';
 
 import {
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAILED,
+  UNLIKE_POST_SUCCESS,
+  UNLIKE_POST_FAILED,
+  LIKE_POST_RESET,
+  UNLIKE_POST_RESET,
   POST_DELETE_FAILED,
   POST_DELETE_REQUEST,
   POST_DELETE_SUCCESS,
@@ -206,6 +212,65 @@ export const editPost = (post) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: POST_EDIT_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+// POst Like Aciton (Public)
+export const likePost = (id) => async (dispatch, getState) => {
+  try {
+  
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.put(`/posts/${id}/like`, {}, config);
+
+    dispatch({
+      type: LIKE_POST_SUCCESS,
+    });
+    dispatch({ type: LIKE_POST_RESET })
+  } catch (error) {
+    dispatch({
+      type: LIKE_POST_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+// POst Unlike Aciton (Public)
+export const unlikePost = (id) => async (dispatch, getState) => {
+  try {
+  
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.put(`/posts/${id}/unlike`, {}, config);
+
+    dispatch({
+      type: UNLIKE_POST_SUCCESS,
+    });
+    dispatch({ type: UNLIKE_POST_RESET })
+
+  } catch (error) {
+    dispatch({
+      type: UNLIKE_POST_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

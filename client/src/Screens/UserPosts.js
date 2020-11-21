@@ -7,6 +7,7 @@ import {
   EllipsisOutlined,
   HddOutlined,
   HeartFilled,
+  HeartOutlined,
   SaveOutlined,
   SendOutlined,
   ShareAltOutlined,
@@ -15,10 +16,11 @@ import {
 import { Alert, Card, Dropdown, Menu, Typography } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserPostsAction, deletePost } from '../Redux/actions/postAction';
+import { getUserPostsAction, deletePost, likePost, unlikePost } from '../Redux/actions/postAction';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Loader from '../Components/Loader';
+import _ from 'lodash';
 
 const { Meta } = Card;
 const { Title } = Typography;
@@ -35,13 +37,25 @@ const UserPosts = ({ userId }) => {
   const postDelete = useSelector((state) => state.postDelete);
   const { success: deleteSuccess, error: deleteError } = postDelete;
 
+  const postLike = useSelector((state) => state.postLike);
+  const { success: likeSuccess } = postLike;
+  
+  const postUnLike = useSelector((state) => state.postUnLike);
+  const { success: unlikeSuccess } = postUnLike;
+
   useEffect(() => {
     dispatch(getUserPostsAction(userId));
-  }, [dispatch, userId, deleteSuccess]);
+  }, [dispatch, userId, deleteSuccess, likeSuccess, unlikeSuccess]);
 
   const postDeleteHandler = (id) => {
     dispatch(deletePost(id));
   };
+  const likePostHandler = (id) => {
+    dispatch(likePost(id))
+  }
+  const unlikePostHandler = (id) => {
+    dispatch(unlikePost(id))
+  }
 
   return (
     <div className="user_personal_post">
@@ -62,11 +76,16 @@ const UserPosts = ({ userId }) => {
             bordered={true}
             cover={post.image && <img alt={post.caption} src={post.image} />}
             actions={[
+              userInfo && _.findIndex(post.like, (o) => o.user.toString() === userInfo._id.toString()) >= 0 ?        
               <span style={{ display: 'inline-block' }}>
-                <HeartFilled style={{ color: '#1890ff' }} />
-                <span style={{ marginLeft: '5px' }}>{post.like}</span>
-              </span>,
-
+                <HeartFilled style={{color: "#ff4d4f"}} key="like" onClick={() => unlikePostHandler(post._id)} />
+                <span style={{ marginLeft: '5px' }}>{post.like.length}</span>
+              </span> : (
+                 <span style={{ display: 'inline-block' }}>
+                 <HeartOutlined style={{color: "#ff4d4f"}} key="unlike" onClick={() => likePostHandler(post._id)} />
+                 <span style={{ marginLeft: '5px' }}>{post.like.length}</span>
+               </span>
+              ),
               <CommentOutlined key="comment" />,
               <ShareAltOutlined key="share" />,
 

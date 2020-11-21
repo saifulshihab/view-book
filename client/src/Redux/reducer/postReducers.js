@@ -1,4 +1,10 @@
 import {
+  LIKE_POST_FAILED,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_RESET,
+  UNLIKE_POST_FAILED,
+  UNLIKE_POST_SUCCESS,
+  UNLIKE_POST_RESET,
   POST_DELETE_FAILED,
   POST_DELETE_REQUEST,
   POST_DELETE_RESET,
@@ -118,6 +124,32 @@ export const postEditReducer = (state = {}, action) => {
     case POST_EDIT_FAILED:
       return { loading: false, error: action.payload };
     case POST_EDIT_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const postLikeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case LIKE_POST_SUCCESS:
+      return { success: true };
+    case LIKE_POST_FAILED:
+      return {  error: action.payload };    
+    case LIKE_POST_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const postUnLikeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UNLIKE_POST_SUCCESS:
+      return { success: true };
+    case UNLIKE_POST_FAILED:
+      return {  error: action.payload };    
+    case UNLIKE_POST_RESET:
       return {};
     default:
       return state;
