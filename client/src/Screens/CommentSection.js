@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
 import { getPostComments, commentOnPost } from "../Redux/actions/postAction";
 import { COMMENT_RESET } from "../Redux/ActionTypes";
+import moment from "moment";
 
 const CommentSection = ({ post }) => {
   const dispatch = useDispatch();
@@ -22,16 +23,15 @@ const CommentSection = ({ post }) => {
   const { loading, error, success: commentSuccess } = commentPost;
 
   useEffect(() => {
-    if (commentSuccess) {
-      dispatch(getPostComments(post._id));
-      alert('dfdf')
+    if(commentSuccess){
+      setComment('')
     }
     dispatch(getPostComments(post._id));
   }, [dispatch, commentSuccess]);
 
   const submitCommentHandler = (id) => {
     dispatch(commentOnPost(id, comment));
-    // dispatch({ type: COMMENT_RESET });
+    dispatch({ type: COMMENT_RESET });
   };
 
   return (
@@ -71,6 +71,7 @@ const CommentSection = ({ post }) => {
                 }
                 description={<p className="comment">{item.comment}</p>}
               />
+              <div>{moment(item.createdAt).fromNow(true)}</div>
             </List.Item>
           )}
         />

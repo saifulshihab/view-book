@@ -33,6 +33,7 @@ import {
   COMMENT_SUCCESS,
   COMMENT_FAILED,
   COMMENT_RESET,
+  COMMENT_REQUEST,
 } from "../ActionTypes";
 
 export const getUserPostReducer = (
@@ -88,19 +89,19 @@ export const postSubmitReducer = (state = {}, action) => {
 
 export const postDeatilsReducer = (
   state = {
-    post: { user: {}, comment: [] },
+    post: { user: {}, like: [] },
   },
   action
 ) => {
   switch (action.type) {
     case POST_DETAILS_REQUEST:
-      return { ...state, loading: true };
+      return { loading: true };
     case POST_DETAILS_SUCCESS:
       return { loading: false, post: action.payload };
     case POST_DETAILS_FAILED:
       return { loading: false, error: action.payload };
     case POST_DETAILS_RESET:
-      return { post: {} };
+      return { post: { user: {}, like: [] } };
     default:
       return state;
   }
@@ -162,12 +163,12 @@ export const postUnLikeReducer = (state = {}, action) => {
   }
 };
 
-export const getCommentsReducer = (state = {}, action) => {
+export const getCommentsReducer = (state = { comments: [] }, action) => {
   switch (action.type) {
     case COMMENTS_FETCH_REQUEST:
       return { loading: true };
     case COMMENTS_FETCH_SUCCESS:
-      return { loading: false, comments: action.payload };
+      return { ...state, loading: false, comments: action.payload };
     case COMMENTS_FETCH_FAILED:
       return { loading: false, error: action.payload };
     default:
@@ -177,7 +178,7 @@ export const getCommentsReducer = (state = {}, action) => {
 
 export const commentPostReducer = (state = {}, action) => {
   switch (action.type) {
-    case COMMENT_SUCCESS:
+    case COMMENT_REQUEST:
       return { loading: true };
     case COMMENT_SUCCESS:
       return { loading: false, success: true };
