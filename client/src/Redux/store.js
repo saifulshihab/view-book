@@ -26,6 +26,7 @@ import {
   postUnLikeReducer,
   getCommentsReducer,
   commentPostReducer,
+  commentDeleteReducer,
 } from "../Redux/reducer/postReducers";
 
 const reducer = combineReducers({
@@ -49,6 +50,7 @@ const reducer = combineReducers({
   unfollowingOthers: unfollowOtherReducer,
   getComments: getCommentsReducer,
   commentPost: commentPostReducer,
+  commentDelete: commentDeleteReducer,
 });
 
 const initialState = {

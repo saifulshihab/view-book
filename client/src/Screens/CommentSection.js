@@ -1,14 +1,27 @@
-import { List, Avatar, Alert } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
-import { getPostComments, commentOnPost } from "../Redux/actions/postAction";
-import { COMMENT_RESET } from "../Redux/ActionTypes";
+import { List, Avatar, Alert, Menu, Dropdown } from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+} from "@ant-design/icons";
+import {
+  getPostComments,
+  commentOnPost,
+  deleteComment,
+} from "../Redux/actions/postAction";
+import { COMMENT_DELETE_RESET, COMMENT_RESET } from "../Redux/ActionTypes";
 import moment from "moment";
 
 const CommentSection = ({ post }) => {
   const dispatch = useDispatch();
+
+  const auth = useSelector((state) => state.auth);
+
+  const { userInfo } = auth;
 
   const [comment, setComment] = useState("");
 
@@ -22,16 +35,26 @@ const CommentSection = ({ post }) => {
   const commentPost = useSelector((state) => state.commentPost);
   const { loading, error, success: commentSuccess } = commentPost;
 
+  const commentDelete = useSelector((state) => state.commentDelete);
+  const {
+    success: commentDeleteSuccess,
+    error: commentDeleteError,
+  } = commentDelete;
+
   useEffect(() => {
-    if(commentSuccess){
-      setComment('')
+    if (commentSuccess) {
+      setComment("");
     }
     dispatch(getPostComments(post._id));
-  }, [dispatch, commentSuccess]);
+  }, [dispatch, commentSuccess, commentDeleteSuccess]);
 
   const submitCommentHandler = (id) => {
     dispatch(commentOnPost(id, comment));
     dispatch({ type: COMMENT_RESET });
+  };
+  const deleteCommentHandler = (postId, commentId) => {
+    dispatch(deleteComment(postId, commentId));
+    dispatch({ type: COMMENT_DELETE_RESET });
   };
 
   return (
@@ -58,7 +81,39 @@ const CommentSection = ({ post }) => {
           // loadMore={loadMore}
           dataSource={comments && comments}
           renderItem={(item) => (
-            <List.Item actions={[<a key="list-loadmore-more">more</a>]}>
+            <List.Item
+              actions={[
+                <Dropdown
+                  overlay={
+                    <Menu>
+                      {userInfo && userInfo._id === item.user._id && (
+                        <Menu.Item key="1">
+                          <Link to={`/user/post/${post._id}`}>
+                            <EditOutlined /> Edit comment
+                          </Link>
+                        </Menu.Item>
+                      )}
+                      {userInfo && userInfo._id === item.user._id && (
+                        <Menu.Item
+                          key="2"
+                          onClick={() => deleteCommentHandler(post._id, item._id)}
+                        >
+                          <DeleteOutlined /> Delete
+                        </Menu.Item>
+                      )}
+                    </Menu>
+                  }
+                >
+                  <a
+                    href="/"
+                    className="ant-dropdown-link"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    <EllipsisOutlined />
+                  </a>
+                </Dropdown>,
+              ]}
+            >
               <List.Item.Meta
                 avatar={<Avatar src={item.user.dp} />}
                 title={

@@ -201,6 +201,39 @@ const commentOnPost = asyncHandler(async (req, res) => {
     throw new Error("Post not found!");
   }
 });
+// @ DEL
+// @ delete a comment
+// @ private
+const deleteComment = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.postId);
+  if (post) {
+    const comment = await Comments.findById(req.params.commentId).populate(
+      "user"
+    );
+    if (comment) {
+      if (comment.user._id.equals(req.user._id)) {
+        const delComment = await comment.remove();
+        if (delComment) {
+          res.json({
+            status: "comment deleted!",
+          });
+        } else {
+          res.status(403);
+          throw new Error("Comment delete error!");
+        }
+      } else {
+        res.status(400);
+        throw new Error("You are not authorized to delete this comment!");
+      }
+    } else {
+      res.status(403);
+      throw new Error("Comment not found!");
+    }
+  } else {
+    res.status(404);
+    throw new Error("Post not found!");
+  }
+});
 
 export {
   getUserPosts,
@@ -213,4 +246,5 @@ export {
   unlikePost,
   getPostComments,
   commentOnPost,
+  deleteComment,
 };

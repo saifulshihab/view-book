@@ -31,6 +31,9 @@ import {
   COMMENT_REQUEST,
   COMMENT_SUCCESS,
   COMMENT_FAILED,
+  COMMENT_DELETE_REQUEST,
+  COMMENT_DELETE_SUCCESS,
+  COMMENT_DELETE_FAILED,
 } from "../ActionTypes";
 
 // Fetch public Posts (GET all) (Public)
@@ -327,11 +330,39 @@ export const commentOnPost = (id, comment) => async (dispatch, getState) => {
     await axios.post(`/posts/${id}/comment`, { comment }, config);
 
     dispatch({
-      type: COMMENT_SUCCESS
+      type: COMMENT_SUCCESS,
     });
   } catch (error) {
     dispatch({
       type: COMMENT_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+// DELETE DELETE a comment (private)
+export const deleteComment = (id, commentId) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: COMMENT_DELETE_REQUEST });
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.delete(`/posts/${id}/comment/${commentId}`, config);
+
+    dispatch({
+      type: COMMENT_DELETE_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: COMMENT_DELETE_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -30,12 +30,12 @@ import _ from "lodash";
 import Avatar from "antd/lib/avatar/avatar";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deletePost } from "../Redux/actions/postAction";
 import {
   likePost,
   unlikePost,
   detailsPost,
   editPost,
+  deletePost,
 } from "../Redux/actions/postAction";
 import CommentSection from "../Screens/CommentSection";
 import { POST_EDIT_RESET } from "../Redux/ActionTypes";
