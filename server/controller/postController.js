@@ -164,9 +164,9 @@ const unlikePost = asyncHandler(async (req, res) => {
 const getPostComments = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId);
   if (post) {
-    const comments = await Comments.find({ post: post._id }).populate(
-      "user"
-    );
+    const comments = await Comments.find({ post: post._id })
+      .sort({ createdAt: "-1" })
+      .populate("user");
     if (comments) {
       res.json(comments);
     } else {
