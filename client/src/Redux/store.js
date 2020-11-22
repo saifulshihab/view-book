@@ -1,9 +1,9 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import {
   AuthReducer,
   profileCoverUpdateReducer,
   SignupReducer,
-} from '../Redux/reducer/userReducer';
+} from "../Redux/reducer/userReducer";
 import {
   profileUpdateReducer,
   profileInfoUserReducer,
@@ -11,10 +11,10 @@ import {
   profileDpUpdateReducer,
   userListReducer,
   followOtherReducer,
-  unfollowOtherReducer
-} from '../Redux/reducer/userReducer';
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+  unfollowOtherReducer,
+} from "../Redux/reducer/userReducer";
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 import {
   getUserPostReducer,
   getPublicPostReducer,
@@ -24,8 +24,9 @@ import {
   postEditReducer,
   postLikeReducer,
   postUnLikeReducer,
-  getCommentsReducer
-} from '../Redux/reducer/postReducers';
+  getCommentsReducer,
+  commentPostReducer,
+} from "../Redux/reducer/postReducers";
 
 const reducer = combineReducers({
   auth: AuthReducer,
@@ -47,13 +48,14 @@ const reducer = combineReducers({
   followingOthers: followOtherReducer,
   unfollowingOthers: unfollowOtherReducer,
   getComments: getCommentsReducer,
+  commentPost: commentPostReducer,
 });
 
 const initialState = {
   auth: {
-    isAuthenticated: localStorage.getItem('userInfo') ? true : false,
-    userInfo: localStorage.getItem('userInfo')
-      ? JSON.parse(localStorage.getItem('userInfo'))
+    isAuthenticated: localStorage.getItem("userInfo") ? true : false,
+    userInfo: localStorage.getItem("userInfo")
+      ? JSON.parse(localStorage.getItem("userInfo"))
       : {},
   },
 };

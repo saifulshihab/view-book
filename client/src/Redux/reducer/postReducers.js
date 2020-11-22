@@ -30,6 +30,9 @@ import {
   COMMENTS_FETCH_REQUEST,
   COMMENTS_FETCH_SUCCESS,
   COMMENTS_FETCH_FAILED,
+  COMMENT_SUCCESS,
+  COMMENT_FAILED,
+  COMMENT_RESET,
 } from "../ActionTypes";
 
 export const getUserPostReducer = (
@@ -167,6 +170,21 @@ export const getCommentsReducer = (state = {}, action) => {
       return { loading: false, comments: action.payload };
     case COMMENTS_FETCH_FAILED:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const commentPostReducer = (state = {}, action) => {
+  switch (action.type) {
+    case COMMENT_SUCCESS:
+      return { loading: true };
+    case COMMENT_SUCCESS:
+      return { loading: false, success: true };
+    case COMMENT_FAILED:
+      return { loading: false, error: action.payload };
+    case COMMENT_RESET:
+      return {};
     default:
       return state;
   }

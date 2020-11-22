@@ -28,6 +28,9 @@ import {
   COMMENTS_FETCH_REQUEST,
   COMMENTS_FETCH_SUCCESS,
   COMMENTS_FETCH_FAILED,
+  COMMENT_REQUEST,
+  COMMENT_SUCCESS,
+  COMMENT_FAILED,
 } from "../ActionTypes";
 
 // Fetch public Posts (GET all) (Public)
@@ -296,11 +299,39 @@ export const getPostComments = (id) => async (dispatch, getState) => {
     dispatch({
       type: COMMENTS_FETCH_SUCCESS,
       payload: data,
-    });    
-    
+    });
   } catch (error) {
     dispatch({
       type: COMMENTS_FETCH_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+// POST comment on post (public)
+export const commentOnPost = (id, comment) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: COMMENT_REQUEST });
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        "Content-Type": "application/json",
+      },
+    };
+    await axios.post(`/posts/${id}/comment`, { comment }, config);
+
+    dispatch({
+      type: COMMENT_SUCCESS
+    });
+  } catch (error) {
+    dispatch({
+      type: COMMENT_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

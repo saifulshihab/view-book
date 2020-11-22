@@ -1,12 +1,15 @@
 import { List, Avatar, Alert } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
-import { getPostComments } from "../Redux/actions/postAction";
+import { getPostComments, commentOnPost } from "../Redux/actions/postAction";
+import { COMMENT_RESET } from "../Redux/ActionTypes";
 
 const CommentSection = ({ post }) => {
   const dispatch = useDispatch();
+
+  const [comment, setComment] = useState("");
 
   const getComments = useSelector((state) => state.getComments);
   const {
@@ -15,17 +18,36 @@ const CommentSection = ({ post }) => {
     comments,
   } = getComments;
 
+  const commentPost = useSelector((state) => state.commentPost);
+  const { loading, error, success: commentSuccess } = commentPost;
+
   useEffect(() => {
+    if (commentSuccess) {
+      dispatch(getPostComments(post._id));
+      alert('dfdf')
+    }
     dispatch(getPostComments(post._id));
-  }, [dispatch]);
+  }, [dispatch, commentSuccess]);
+
+  const submitCommentHandler = (id) => {
+    dispatch(commentOnPost(id, comment));
+    // dispatch({ type: COMMENT_RESET });
+  };
 
   return (
     <div className="commentSection">
       {commentsLoading && <Loader ind />}
       <p>Comments</p>
       <div className="input_box">
-        <input placeholder="Write a comment..." />
-        <i className="fa fa-paper-plane" aria-hidden="true"></i>
+        <input
+          placeholder="Write a comment..."
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <i
+          className="fa fa-paper-plane"
+          aria-hidden="true"
+          onClick={() => submitCommentHandler(post && post._id)}
+        ></i>
       </div>
       {commentsError && <Alert type="info" message={commentsError} showIcon />}
       <div className="comment_list">
@@ -47,7 +69,7 @@ const CommentSection = ({ post }) => {
                     {item.user.full_name}
                   </Link>
                 }
-                description={<p>{item.comment}</p>}
+                description={<p className="comment">{item.comment}</p>}
               />
             </List.Item>
           )}

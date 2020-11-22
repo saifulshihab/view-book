@@ -284,4 +284,8 @@ body {
 }
 .commentSection .input_box i {
   color: #03a9f4;
+  cursor: pointer;
+}
+.commentSection .comment{
+  color: black !important;
 }

@@ -93,7 +93,7 @@ const Post = ({ post }) => {
           ),
           <CommentOutlined
             key="comment"
-            onClick={() => setCommentSection(!commentSection)}
+            onClick={() => setCommentSection(true)}
           />,
           <ShareAltOutlined key="share" />,
           <Dropdown
