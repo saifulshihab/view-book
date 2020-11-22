@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 import {
   LIKE_POST_SUCCESS,
@@ -25,7 +25,10 @@ import {
   USER_POST_FETCH_FAILED,
   USER_POST_FETCH_REQUEST,
   USER_POST_FETCH_SUCCESS,
-} from '../ActionTypes';
+  COMMENTS_FETCH_REQUEST,
+  COMMENTS_FETCH_SUCCESS,
+  COMMENTS_FETCH_FAILED,
+} from "../ActionTypes";
 
 // Fetch public Posts (GET all) (Public)
 export const getPublicPostsAction = () => async (dispatch, getState) => {
@@ -74,7 +77,7 @@ export const getUserPostsAction = (userId) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -107,11 +110,11 @@ export const postSubmitAction = (data) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    await axios.post('/posts', data, config);
+    await axios.post("/posts", data, config);
 
     dispatch({
       type: POST_SUBMIT_SUCCESS,
@@ -222,7 +225,6 @@ export const editPost = (post) => async (dispatch, getState) => {
 // POst Like Aciton (Public)
 export const likePost = (id) => async (dispatch, getState) => {
   try {
-  
     const {
       auth: { userInfo },
     } = getState();
@@ -237,7 +239,7 @@ export const likePost = (id) => async (dispatch, getState) => {
     dispatch({
       type: LIKE_POST_SUCCESS,
     });
-    dispatch({ type: LIKE_POST_RESET })
+    dispatch({ type: LIKE_POST_RESET });
   } catch (error) {
     dispatch({
       type: LIKE_POST_FAILED,
@@ -251,7 +253,6 @@ export const likePost = (id) => async (dispatch, getState) => {
 // POst Unlike Aciton (Public)
 export const unlikePost = (id) => async (dispatch, getState) => {
   try {
-  
     const {
       auth: { userInfo },
     } = getState();
@@ -266,11 +267,40 @@ export const unlikePost = (id) => async (dispatch, getState) => {
     dispatch({
       type: UNLIKE_POST_SUCCESS,
     });
-    dispatch({ type: UNLIKE_POST_RESET })
-
+    dispatch({ type: UNLIKE_POST_RESET });
   } catch (error) {
     dispatch({
       type: UNLIKE_POST_FAILED,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+// GET Post comment (public)
+export const getPostComments = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: COMMENTS_FETCH_REQUEST });
+    const {
+      auth: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/posts/${id}/comment`, config);
+
+    dispatch({
+      type: COMMENTS_FETCH_SUCCESS,
+      payload: data,
+    });    
+    
+  } catch (error) {
+    dispatch({
+      type: COMMENTS_FETCH_FAILED,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

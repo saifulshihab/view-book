@@ -1,25 +1,25 @@
-import Post from '../models/posts.js';
-import asyncHandler from 'express-async-handler';
-import _ from 'lodash';
+import Post from "../models/posts.js";
+import Comments from "../models/comments.js";
+import asyncHandler from "express-async-handler";
+import _ from "lodash";
 
-
-// @ GET 
+// @ GET
 // @ fetch all posts
-// @ public 
+// @ public
 const fetchAllPost = asyncHandler(async (req, res) => {
-  const posts = await Post.find({}).sort({ createdAt: '-1' }).populate('user');
+  const posts = await Post.find({}).sort({ createdAt: "-1" }).populate("user");
   if (posts) {
     res.status(200);
     res.json(posts);
   } else {
     res.status(404);
-    throw new Error('Posts not Found!');
+    throw new Error("Posts not Found!");
   }
 });
 
-// @ POST 
+// @ POST
 // @ create a post by users
-// @ public 
+// @ public
 const postCreate = asyncHandler(async (req, res) => {
   const { caption, image } = req.body;
   const creaePost = await Post.create({ caption, image, user: req.user });
@@ -33,13 +33,13 @@ const postCreate = asyncHandler(async (req, res) => {
   }
 });
 
-// @ GET 
+// @ GET
 // @ get specific user posts
-// @ public 
+// @ public
 const getUserPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({})
-    .sort({ createdAt: '-1' })
-    .populate('user')
+    .sort({ createdAt: "-1" })
+    .populate("user")
     .find({ user: req.params.userId });
 
   if (posts) {
@@ -47,27 +47,27 @@ const getUserPosts = asyncHandler(async (req, res) => {
     res.json(posts);
   } else {
     res.status(404);
-    throw new Error('No posts found!');
+    throw new Error("No posts found!");
   }
 });
 
-// @ GET 
+// @ GET
 // @ get specific post
-// @ public 
+// @ public
 const getPostById = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.postId).populate('user');
+  const post = await Post.findById(req.params.postId).populate("user");
   if (post) {
     res.status(200);
     res.json(post);
   } else {
     res.status(404);
-    throw new Error('Post not found!');
+    throw new Error("Post not found!");
   }
 });
 
-// @ DEL 
+// @ DEL
 // @ delete post
-// @ private 
+// @ private
 const userPostDelete = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId);
   if (post) {
@@ -77,16 +77,16 @@ const userPostDelete = asyncHandler(async (req, res) => {
       res.json(post);
     } else {
       res.status(401);
-      throw new Error('You are not authorized to delete this post!');
+      throw new Error("You are not authorized to delete this post!");
     }
   } else {
     res.status(404);
-    throw new Error('Post not found!');
+    throw new Error("Post not found!");
   }
 });
-// @ PUT 
+// @ PUT
 // @ edit post
-// @ private 
+// @ private
 const userPostEdit = asyncHandler(async (req, res) => {
   const { caption, image } = req.body;
   const post = await Post.findById(req.params.postId);
@@ -98,43 +98,43 @@ const userPostEdit = asyncHandler(async (req, res) => {
       res.status(201).json(updatedPost);
     } else {
       res.status(401);
-      throw new Error('You are not authorized to edit this post!');
+      throw new Error("You are not authorized to edit this post!");
     }
   } else {
     res.status(404);
-    throw new Error('Post not found!');
+    throw new Error("Post not found!");
   }
 });
 
-// @ PUT 
+// @ PUT
 // @ give like to a post
-// @ public 
-const likePost = asyncHandler(async (req, res) => {  
+// @ public
+const likePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId);
   if (post) {
     const newLike = {
-      user: req.user._id
-    }
+      user: req.user._id,
+    };
     post.like.push(newLike);
-     const updatedPost = await post.save()
-     if(updatedPost){
+    const updatedPost = await post.save();
+    if (updatedPost) {
       res.json({
-        "status": "ok",
-        "post": updatedPost
-      })
-     }else{
+        status: "ok",
+        post: updatedPost,
+      });
+    } else {
       res.status(403);
-      throw new Error('Liked failed!');
-     }
+      throw new Error("Liked failed!");
+    }
   } else {
     res.status(404);
-    throw new Error('Post not found!');
+    throw new Error("Post not found!");
   }
 });
-// @ PUT 
+// @ PUT
 // @ unlike post
-// @ public 
-const unlikePost = asyncHandler(async (req, res) => {  
+// @ public
+const unlikePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.postId);
   if (post) {
     const userIdx = _.findIndex(post.like, function (o) {
@@ -142,20 +142,63 @@ const unlikePost = asyncHandler(async (req, res) => {
     });
 
     post.like.splice(userIdx, 1);
-   
-     const updatedPost = await post.save()
-     if(updatedPost){
+
+    const updatedPost = await post.save();
+    if (updatedPost) {
       res.json({
-        "status": "ok",
-        "post": updatedPost
-      })
-     }else{
+        status: "ok",
+        post: updatedPost,
+      });
+    } else {
       res.status(403);
-      throw new Error('Unliked failed!');
-     }
+      throw new Error("Unliked failed!");
+    }
   } else {
     res.status(404);
-    throw new Error('Post not found!');
+    throw new Error("Post not found!");
+  }
+});
+// @ POST
+// @ comment on a post
+// @ public
+const getPostComments = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.postId);
+  if (post) {
+    const comments = await Comments.find({ post: post._id }).populate(
+      "user"
+    );
+    if (comments) {
+      res.json(comments);
+    } else {
+      res.status(404);
+      throw new Error("No comments");
+    }
+  } else {
+    res.status(404);
+    throw new Error("Post not found!");
+  }
+});
+// @ POST
+// @ comment on a post
+// @ public
+const commentOnPost = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.postId);
+  if (post) {
+    const { comment } = req.body;
+    const newComment = await Comments.create({
+      post: post._id,
+      user: req.user._id,
+      comment,
+    });
+    if (newComment) {
+      res.json(newComment);
+    } else {
+      res.status(403);
+      throw new Error("Comment failed!");
+    }
+  } else {
+    res.status(404);
+    throw new Error("Post not found!");
   }
 });
 
@@ -167,5 +210,7 @@ export {
   userPostEdit,
   getPostById,
   likePost,
-  unlikePost
+  unlikePost,
+  getPostComments,
+  commentOnPost,
 };

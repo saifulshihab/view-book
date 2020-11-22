@@ -27,7 +27,10 @@ import {
   USER_POST_FETCH_FAILED,
   USER_POST_FETCH_REQUEST,
   USER_POST_FETCH_SUCCESS,
-} from '../ActionTypes';
+  COMMENTS_FETCH_REQUEST,
+  COMMENTS_FETCH_SUCCESS,
+  COMMENTS_FETCH_FAILED,
+} from "../ActionTypes";
 
 export const getUserPostReducer = (
   state = {
@@ -135,7 +138,7 @@ export const postLikeReducer = (state = {}, action) => {
     case LIKE_POST_SUCCESS:
       return { success: true };
     case LIKE_POST_FAILED:
-      return {  error: action.payload };    
+      return { error: action.payload };
     case LIKE_POST_RESET:
       return {};
     default:
@@ -148,9 +151,22 @@ export const postUnLikeReducer = (state = {}, action) => {
     case UNLIKE_POST_SUCCESS:
       return { success: true };
     case UNLIKE_POST_FAILED:
-      return {  error: action.payload };    
+      return { error: action.payload };
     case UNLIKE_POST_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const getCommentsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case COMMENTS_FETCH_REQUEST:
+      return { loading: true };
+    case COMMENTS_FETCH_SUCCESS:
+      return { loading: false, comments: action.payload };
+    case COMMENTS_FETCH_FAILED:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }
