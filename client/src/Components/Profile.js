@@ -12,6 +12,7 @@ import {
   Alert,
   Upload,
   Image,
+  List,
 } from "antd";
 import {
   CameraOutlined,
@@ -48,6 +49,7 @@ function Profile({ username }) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [dpModal, setDpmodal] = useState(false);
+  const [detailsModal, setDetailsModal] = useState(false);
   const [coverModal, setCovermodal] = useState(false);
   const [dp, setDp] = useState("");
   const [cover, setCover] = useState("");
@@ -210,7 +212,6 @@ function Profile({ username }) {
                 <p className="views">Views: {user.view}</p>
               </div>
             </div>
-
             <Row>
               {/* <Col span={1}></Col> */}
               <Col span={24}>
@@ -225,7 +226,7 @@ function Profile({ username }) {
                           {user.education &&
                             user.education.map((el) => (
                               <div key={el._id}>
-                                <EditOutlined />
+                                <i class="fas fa-graduation-cap"></i>
                                 <span>{el.institute}</span>
                               </div>
                             ))}
@@ -273,17 +274,21 @@ function Profile({ username }) {
                         </ul>
                       </div>
                     </div>
-                    <Button type="primary" block>
-                      View Details
-                    </Button>
-                    <Button
-                      type="primary"
-                      onClick={() => setModalOpen(true)}
-                      block
-                    >
-                      Edit Profile
-                    </Button>
                     <Button.Group>
+                      <Button
+                        type="primary"
+                        onClick={() => setDetailsModal(true)}
+                        block
+                      >
+                        View Details
+                      </Button>
+                      <Button
+                        type="primary"
+                        onClick={() => setModalOpen(true)}
+                        block
+                      >
+                        Edit Profile
+                      </Button>
                       <Button
                         onClick={() => setDpmodal(true)}
                         icon={<CameraOutlined />}
@@ -510,6 +515,51 @@ function Profile({ username }) {
           {coverupdateError && (
             <Alert type="error" message={coverupdateError} showIcon closable />
           )}
+        </Modal>
+        <Modal
+          title="Profile Details"
+          onCancel={() => setDetailsModal(false)}
+          visible={detailsModal}
+          footer={null}
+        >
+          <List size="large">
+            <List.Item>
+              <List.Item.Meta
+                title={"Email"}
+                avatar={<i class="fas fa-envelope"></i>}
+              />
+              {user && user.email}
+            </List.Item>
+            <List.Item>
+              <List.Item.Meta
+                title={"Education"}
+                avatar={<i class="fa fa-graduation-cap" aria-hidden="true"></i>}
+              />
+            </List.Item>
+            {user.education &&
+              user.education.map((d) => (
+                <>
+                  <h4>{d.institute}</h4>  
+                  <p>{d.desc}</p>  
+                  <p style={{fontStyle: "italic"}}>
+                    {d.from} - {d.to ? d.to : d.present && "Present"}
+                  </p>
+                </>
+              ))}
+            <List.Item>
+              <List.Item.Meta
+                title={"Social Links"}
+                avatar={<i class="fa fa-link" aria-hidden="true"></i>}
+              />
+            </List.Item>
+            {user.social &&
+              user.social.map((d) => (
+                <>
+                  <h4>{d.platform}</h4>           
+                  <p>{d.link}</p>
+                </>
+              ))}
+          </List>
         </Modal>
       </div>
     )

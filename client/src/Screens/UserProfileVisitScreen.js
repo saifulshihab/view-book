@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { Alert, Button, Col, Row } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { Alert, Button, Col, Row, Modal, List } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 import {
   EditOutlined,
   FacebookOutlined,
@@ -8,16 +8,16 @@ import {
   InstagramOutlined,
   MailOutlined,
   WifiOutlined,
-} from '@ant-design/icons';
-import PublicPosts from './UserPosts';
-import { getProfileInfoPublic } from '../Redux/actions/userAction';
-import { baseURL } from '../shared/baseURL';
-import Loader from '../Components/Loader';
+} from "@ant-design/icons";
+import PublicPosts from "./UserPosts";
+import { getProfileInfoPublic } from "../Redux/actions/userAction";
+import Loader from "../Components/Loader";
 // import { PROFILE_FETCH_PUBLIC_RESET } from '../Redux/ActionTypes';
 
 const UserProfileVisitScreen = ({ match }) => {
   const dispatch = useDispatch();
   const username = match.params.username;
+  const [detailsModal, setDetailsModal] = useState(false);
   const publicProfileInfo = useSelector((state) => state.publicProfileInfo);
   const { user: userPublic, loading, error } = publicProfileInfo;
 
@@ -57,8 +57,7 @@ const UserProfileVisitScreen = ({ match }) => {
               </div>
             </div>
             <Row>
-              <Col span={1}></Col>
-              <Col span={8}>
+              <Col span={24}>
                 <h2 className="user_post_heading_h1">Intro</h2>
                 <div className="pro_info_2_wrapper">
                   <div className="pro_info_2">
@@ -67,7 +66,7 @@ const UserProfileVisitScreen = ({ match }) => {
                         {userPublic.education &&
                           userPublic.education.map((el) => (
                             <div key={el._id}>
-                              <EditOutlined />
+                             <i class="fas fa-graduation-cap"></i>
                               <span>{el.institute}</span>
                             </div>
                           ))}
@@ -76,9 +75,9 @@ const UserProfileVisitScreen = ({ match }) => {
                         {userPublic.social &&
                           userPublic.social.map((el) => (
                             <div key={el._id}>
-                              {el.platform === 'Instagram' ? (
+                              {el.platform === "Instagram" ? (
                                 <InstagramOutlined />
-                              ) : el.platform === 'Facebook' ? (
+                              ) : el.platform === "Facebook" ? (
                                 <FacebookOutlined />
                               ) : (
                                 <WifiOutlined />
@@ -90,32 +89,82 @@ const UserProfileVisitScreen = ({ match }) => {
                           ))}
                       </li>
                       <li>
-                        <MailOutlined />
+                        {userPublic.email && <MailOutlined />}
                         <span>{userPublic.email && userPublic.email}</span>
                       </li>
                       <li>
-                        <HeartOutlined />
+                        {userPublic.relationship && <HeartOutlined />}
                         <span>
                           {userPublic.relationship && userPublic.relationship}
                         </span>
                       </li>
                     </ul>
                   </div>
-                  <Button type="primary" size="middle" block>
+                  <Button
+                    type="primary"
+                    onClick={() => setDetailsModal(true)}
+                    size="middle"
+                    block
+                  >
                     View Details
                   </Button>
                 </div>
               </Col>
-              <Col span={1}></Col>
-              <Col span={13}>
+            </Row>
+            <Row>
+              <Col span={24}>
                 <h2 className="user_post_heading_h1">Posts</h2>
                 {userPublic._id && <PublicPosts userId={userPublic._id} />}
               </Col>
-              <Col span={1} />
             </Row>
           </>
         )}
       </Col>
+      <Modal
+        title="Profile Details"
+        onCancel={() => setDetailsModal(false)}
+        visible={detailsModal}
+        footer={null}
+      >
+        <List size="large">
+          <List.Item>
+            <List.Item.Meta
+              title={"Email"}
+              avatar={<i class="fas fa-envelope"></i>}
+            />
+            {userPublic && userPublic.email}
+          </List.Item>
+          <List.Item>
+            <List.Item.Meta
+              title={"Education"}
+              avatar={<i class="fa fa-graduation-cap" aria-hidden="true"></i>}
+            />
+            {/* {userPublic.education &&
+              userPublic.education.map((d) => (
+                <>
+                  <h6>{d.institute}</h6>
+                  <p>{d.desc}</p>
+                  <p>
+                    {d.from} - {d.to ? d.to : d.present}
+                  </p>
+                </>
+              ))} */}
+          </List.Item>
+          <List.Item>
+            <List.Item.Meta
+              title={"Social Links"}
+              avatar={<i class="fa fa-link" aria-hidden="true"></i>}
+            />
+            {/* {userPublic.social &&
+              userPublic.social.map((d) => (
+                <>
+                  <h6>{d.platform}</h6>
+                  <p>{d.link}</p>
+                </>
+              ))} */}
+          </List.Item>
+        </List>
+      </Modal>
     </Row>
   );
 };

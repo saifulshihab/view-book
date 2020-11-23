@@ -59,19 +59,19 @@ const CommentSection = ({ post }) => {
 
   return (
     <div className="commentSection">
-      {commentsLoading && <Loader ind />}
       <p>Comments</p>
       <div className="input_box">
         <input
           placeholder="Write a comment..."
           onChange={(e) => setComment(e.target.value)}
-        />
+          />
         <i
           className="fa fa-paper-plane"
           aria-hidden="true"
           onClick={() => submitCommentHandler(post && post._id)}
-        ></i>
+          ></i>
       </div>
+      {commentsLoading && <Loader ind />}
       {commentsError && <Alert type="info" message={commentsError} showIcon />}
       <div className="comment_list">
         <List

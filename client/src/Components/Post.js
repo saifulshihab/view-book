@@ -190,9 +190,7 @@ const Post = ({ post }) => {
                 <Menu>
                   {userInfo && userInfo._id === post.user._id && (
                     <Menu.Item key="1" onClick={() => setModalOpen(true)}>
-                    
-                        <EditOutlined /> Edit Post
-                      
+                      <EditOutlined /> Edit Post
                     </Menu.Item>
                   )}
                   {userInfo && userInfo._id === post.user._id && (
