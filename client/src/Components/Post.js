@@ -189,10 +189,10 @@ const Post = ({ post }) => {
               overlay={
                 <Menu>
                   {userInfo && userInfo._id === post.user._id && (
-                    <Menu.Item key="1">
-                      <Link to={`/user/post/${post._id}`}>
+                    <Menu.Item key="1" onClick={() => setModalOpen(true)}>
+                    
                         <EditOutlined /> Edit Post
-                      </Link>
+                      
                     </Menu.Item>
                   )}
                   {userInfo && userInfo._id === post.user._id && (

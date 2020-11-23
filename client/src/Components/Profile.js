@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import {
   Button,
@@ -12,7 +12,7 @@ import {
   Alert,
   Upload,
   Image,
-} from 'antd';
+} from "antd";
 import {
   CameraOutlined,
   EditOutlined,
@@ -22,23 +22,23 @@ import {
   MailOutlined,
   UserSwitchOutlined,
   WifiOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 import {
   getProfileInfoUser,
   profileUpdate,
   updateProfileDp,
   updateProfileCover,
-} from '../Redux/actions/userAction';
-import { useDispatch, useSelector } from 'react-redux';
-import PublicPosts from '../Screens/UserPosts';
+} from "../Redux/actions/userAction";
+import { useDispatch, useSelector } from "react-redux";
+import PublicPosts from "../Screens/UserPosts";
 import {
   PROFILE_COVER_UPDATE_RESET,
   PROFILE_DP_UPDATE_RESET,
   PROFILE_FETCH_USER_RESET,
   PROFILE_UPDATE_RESET,
-} from '../Redux/ActionTypes';
-import { Link } from 'react-router-dom';
-import Loader from './Loader';
+} from "../Redux/ActionTypes";
+import { Link } from "react-router-dom";
+import Loader from "./Loader";
 
 const { Option } = Select;
 
@@ -49,8 +49,8 @@ function Profile({ username }) {
   const [uploading, setUploading] = useState(false);
   const [dpModal, setDpmodal] = useState(false);
   const [coverModal, setCovermodal] = useState(false);
-  const [dp, setDp] = useState('');
-  const [cover, setCover] = useState('');
+  const [dp, setDp] = useState("");
+  const [cover, setCover] = useState("");
 
   const userProfileInfo = useSelector((state) => state.userProfileInfo);
   const {
@@ -113,16 +113,16 @@ function Profile({ username }) {
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append("image", file);
     setUploading(true);
     try {
       const config = {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       };
 
-      const { data } = await axios.post('/upload', formData, config);
+      const { data } = await axios.post("/upload", formData, config);
 
       setDp(data);
       setUploading(false);
@@ -135,16 +135,16 @@ function Profile({ username }) {
   const uploadCoverFileHandler = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append("image", file);
     setUploading(true);
     try {
       const config = {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       };
 
-      const { data } = await axios.post('/upload', formData, config);
+      const { data } = await axios.post("/upload", formData, config);
 
       setCover(data);
       setUploading(false);
@@ -213,7 +213,7 @@ function Profile({ username }) {
 
             <Row>
               {/* <Col span={1}></Col> */}
-              <Col span={9}>
+              <Col span={24}>
                 <h2 className="user_post_heading_h1">Intro</h2>
                 {loadingProfileEdit ? (
                   <Loader />
@@ -234,9 +234,9 @@ function Profile({ username }) {
                           {user.social &&
                             user.social.map((el) => (
                               <div key={el._id}>
-                                {el.platform === 'Instagram' ? (
+                                {el.platform === "Instagram" ? (
                                   <InstagramOutlined />
-                                ) : el.platform === 'Facebook' ? (
+                                ) : el.platform === "Facebook" ? (
                                   <FacebookOutlined />
                                 ) : (
                                   <WifiOutlined />
@@ -260,13 +260,13 @@ function Profile({ username }) {
                         <ul>
                           <Link to={`/followers`}>
                             <li>
-                              <UserSwitchOutlined /> {user.followers.length}{' '}
+                              <UserSwitchOutlined /> {user.followers.length}{" "}
                               Followers
                             </li>
                           </Link>
-                          <Link to={'/following'}>
+                          <Link to={"/following"}>
                             <li>
-                              <UserSwitchOutlined /> {user.following.length}{' '}
+                              <UserSwitchOutlined /> {user.following.length}{" "}
                               Following
                             </li>
                           </Link>
@@ -302,7 +302,7 @@ function Profile({ username }) {
 
                 {successProfileEdit && (
                   <Alert
-                    message={'Profile Updated!'}
+                    message={"Profile Updated!"}
                     type="success"
                     closable
                     showIcon
@@ -312,12 +312,12 @@ function Profile({ username }) {
                   <Alert message={errorProfileEdit} type="error" showIcon />
                 )}
               </Col>
-              <Col span={1}></Col>
-              <Col span={14}>
+            </Row>
+            <Row>
+              <Col span={24}>
                 <h2 className="user_post_heading_h1">Posts</h2>
                 {user._id && <PublicPosts userId={user._id} />}
               </Col>
-              <Col span={1} />
             </Row>
           </Col>
         </Row>

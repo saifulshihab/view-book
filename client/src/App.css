@@ -101,6 +101,7 @@ body {
 }
 .pro_info_2_wrapper {
   padding: 8px;
+  margin-bottom: 15px;
 }
 .pro_info_2_wrapper Button {
   margin-bottom: 10px;
@@ -286,6 +287,6 @@ body {
   color: #03a9f4;
   cursor: pointer;
 }
-.commentSection .comment{
+.commentSection .comment {
   color: black !important;
 }
