@@ -27,6 +27,7 @@ import {
   getCommentsReducer,
   commentPostReducer,
   commentDeleteReducer,
+  commentEditReducer,
 } from "../Redux/reducer/postReducers";
 
 const reducer = combineReducers({
@@ -51,6 +52,7 @@ const reducer = combineReducers({
   getComments: getCommentsReducer,
   commentPost: commentPostReducer,
   commentDelete: commentDeleteReducer,
+  commentEdit: commentEditReducer,
 });
 
 const initialState = {

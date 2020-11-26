@@ -38,6 +38,10 @@ import {
   COMMENT_DELETE_FAILED,
   COMMENT_DELETE_RESET,
   COMMENT_DELETE_REQUEST,
+  COMMENT_EDIT_SUCCESS,
+  COMMENT_EDIT_FAILED,
+  COMMENT_EDIT_RESET,
+  COMMENT_EDIT_REQUEST,
 } from "../ActionTypes";
 
 export const getUserPostReducer = (
@@ -204,6 +208,21 @@ export const commentDeleteReducer = (state = {}, action) => {
     case COMMENT_DELETE_FAILED:
       return { loading: false, error: action.payload };
     case COMMENT_DELETE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const commentEditReducer = (state = {}, action) => {
+  switch (action.type) {
+    case COMMENT_EDIT_REQUEST:
+      return { loading: true };
+    case COMMENT_EDIT_SUCCESS:
+      return { loading: false, success: true };
+    case COMMENT_EDIT_FAILED:
+      return { loading: false, error: action.payload };
+    case COMMENT_EDIT_RESET:
       return {};
     default:
       return state;

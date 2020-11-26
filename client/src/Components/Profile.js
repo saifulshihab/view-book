@@ -224,7 +224,7 @@ function Profile({ username }) {
                       <ul>
                         <li>
                           {user.education &&
-                            user.education.map((el) => (
+                             user.education.map((el) => (
                               <div key={el._id}>
                                 <i class="fas fa-graduation-cap"></i>
                                 <span>{el.institute}</span>

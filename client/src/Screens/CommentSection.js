@@ -2,7 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
-import { List, Avatar, Alert, Menu, Dropdown } from "antd";
+import {
+  List,
+  Avatar,
+  Alert,
+  Menu,
+  Dropdown,
+  Input,
+  Modal,
+  Form,
+  Button,
+} from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -12,8 +22,13 @@ import {
   getPostComments,
   commentOnPost,
   deleteComment,
+  editComment,
 } from "../Redux/actions/postAction";
-import { COMMENT_DELETE_RESET, COMMENT_RESET } from "../Redux/ActionTypes";
+import {
+  COMMENT_DELETE_RESET,
+  COMMENT_RESET,
+  COMMENT_EDIT_RESET,
+} from "../Redux/ActionTypes";
 import moment from "moment";
 
 const CommentSection = ({ post }) => {
@@ -24,6 +39,11 @@ const CommentSection = ({ post }) => {
   const { userInfo } = auth;
 
   const [comment, setComment] = useState("");
+  const [updateComment, setUpdateComment] = useState("");
+  const [updateCommentId, setUpdateCommentId] = useState("");
+  const [updateCommentPostId, setUpdateCommentPostId] = useState("");
+
+  const [commentModal, setCommentModal] = useState(false);
 
   const getComments = useSelector((state) => state.getComments);
   const {
@@ -41,12 +61,21 @@ const CommentSection = ({ post }) => {
     error: commentDeleteError,
   } = commentDelete;
 
+  const commentEdit = useSelector((state) => state.commentEdit);
+  const { success: commentEditSuccess, error: commentEditError } = commentEdit;
+
   useEffect(() => {
     if (commentSuccess) {
       setComment("");
     }
-    dispatch(getPostComments(post._id));
-  }, [dispatch, commentSuccess, commentDeleteSuccess]);
+    if (commentEditSuccess) {
+      setUpdateComment("");
+      setUpdateCommentId("");
+      setUpdateCommentPostId("");
+      console.log("clear");
+    }
+    dispatch(getPostComments(post?._id));
+  }, [dispatch, commentSuccess, commentDeleteSuccess, commentEditSuccess]);
 
   const submitCommentHandler = (id) => {
     dispatch(commentOnPost(id, comment));
@@ -57,19 +86,34 @@ const CommentSection = ({ post }) => {
     dispatch({ type: COMMENT_DELETE_RESET });
   };
 
+  const commentModalOpenHandler = (postId, commentId, comment) => {
+    setUpdateCommentPostId(postId);
+    setUpdateCommentId(commentId);
+    setUpdateComment(comment);
+    console.log(updateCommentPostId, updateCommentId, updateComment);
+    setCommentModal(true);
+  };
+
+  const editCommentHandler = () => {
+    dispatch(editComment(updateCommentPostId, updateCommentId, updateComment));
+    dispatch({ type: COMMENT_EDIT_RESET });
+    setCommentModal(false);
+  };
+
   return (
     <div className="commentSection">
-      <p>Comments</p>
+      <p>Comments ({comments && comments.length})</p>
       <div className="input_box">
         <input
+          value={comment}
           placeholder="Write a comment..."
           onChange={(e) => setComment(e.target.value)}
-          />
+        />
         <i
           className="fa fa-paper-plane"
           aria-hidden="true"
           onClick={() => submitCommentHandler(post && post._id)}
-          ></i>
+        ></i>
       </div>
       {commentsLoading && <Loader ind />}
       {commentsError && <Alert type="info" message={commentsError} showIcon />}
@@ -87,16 +131,25 @@ const CommentSection = ({ post }) => {
                   overlay={
                     <Menu>
                       {userInfo && userInfo._id === item.user._id && (
-                        <Menu.Item key="1">
-                          <Link to={`/user/post/${post._id}`}>
-                            <EditOutlined /> Edit comment
-                          </Link>
+                        <Menu.Item
+                          key="1"
+                          onClick={() =>
+                            commentModalOpenHandler(
+                              post?._id,
+                              item?._id,
+                              item?.comment
+                            )
+                          }
+                        >
+                          <EditOutlined /> Edit comment
                         </Menu.Item>
                       )}
                       {userInfo && userInfo._id === item.user._id && (
                         <Menu.Item
                           key="2"
-                          onClick={() => deleteCommentHandler(post._id, item._id)}
+                          onClick={() =>
+                            deleteCommentHandler(post._id, item._id)
+                          }
                         >
                           <DeleteOutlined /> Delete
                         </Menu.Item>
@@ -131,6 +184,29 @@ const CommentSection = ({ post }) => {
           )}
         />
       </div>
+      <Modal
+        title="Update Comment"
+        onCancel={() => {
+          setCommentModal(false);
+          setUpdateComment("");
+        }}
+        visible={commentModal}
+        footer={null}
+      >
+        <Form>
+          <Form.Item name="comment">
+            <Input
+              defaultValue={updateComment && updateComment}
+              onChange={(e) => setUpdateComment(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" onClick={editCommentHandler}>
+              Update
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

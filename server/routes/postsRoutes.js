@@ -13,6 +13,7 @@ import {
   commentOnPost,
   getPostComments,
   deleteComment,
+  editComment,
 } from "../controller/postController.js";
 const router = express.Router();
 
@@ -29,6 +30,9 @@ router
   .route("/:postId/comment")
   .get(verifyUser, getPostComments)
   .post(verifyUser, commentOnPost);
-router.route("/:postId/comment/:commentId").delete(verifyUser, deleteComment);
+router
+  .route("/:postId/comment/:commentId")
+  .delete(verifyUser, deleteComment)
+  .put(verifyUser, editComment);
 
 export default router;
