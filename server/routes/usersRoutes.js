@@ -34,7 +34,7 @@ router.route('/:id/dp').put(verifyUser, updateUserDp);
 router.route('/').get(verifyUser, getUserList);
 
 //Follow Others
-router.route('/:id/follow').post(verifyUser, followOthers);
-router.route('/:id/unfollow').delete(verifyUser, unfollowOthers);
+router.route('/:id/follow').put(verifyUser, followOthers);
+router.route('/:id/unfollow').put(verifyUser, unfollowOthers);
 
 export default router;

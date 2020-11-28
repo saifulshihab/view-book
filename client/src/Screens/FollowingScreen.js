@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { List, Avatar, Alert, Button } from 'antd';
-import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { UserDeleteOutlined } from '@ant-design/icons';
-import { getProfileInfoUser } from '../Redux/actions/userAction';
-import { unfollowOthers } from '../Redux/actions/userAction';
-import { UNFOLLOW_OTHERS_RESET } from '../Redux/ActionTypes';
-import Loader from '../Components/Loader';
+import React, { useEffect } from "react";
+import { List, Avatar, Alert, Button } from "antd";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { UserDeleteOutlined } from "@ant-design/icons";
+import { getProfileInfoUser } from "../Redux/actions/userAction";
+import { unfollowOthers } from "../Redux/actions/userAction";
+import { UNFOLLOW_OTHERS_RESET } from "../Redux/ActionTypes";
+import Loader from "../Components/Loader";
 
 const FollowingScreen = () => {
   const dispatch = useDispatch();
@@ -26,15 +26,13 @@ const FollowingScreen = () => {
   } = unfollowingOthers;
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0);    
     if (!user || unfollowSuccess) {
-      window.scrollTo(0, 0);
       dispatch(getProfileInfoUser(user.username));
       dispatch({ type: UNFOLLOW_OTHERS_RESET });
     }
-  }, [dispatch, user, unfollowSuccess]);
+  }, [dispatch, unfollowSuccess]);
 
- 
   const unfollowOthersHandler = (id) => {
     dispatch(unfollowOthers(id));
   };

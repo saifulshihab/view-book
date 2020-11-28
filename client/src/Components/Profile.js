@@ -56,9 +56,9 @@ function Profile({ username }) {
 
   const userProfileInfo = useSelector((state) => state.userProfileInfo);
   const {
-    user,
     loading: userInfoLoading,
     error: userInfoError,
+    user,
   } = userProfileInfo;
 
   const profileDpUpdate = useSelector((state) => state.profileDpUpdate);
@@ -83,18 +83,18 @@ function Profile({ username }) {
   } = userProfileUpdate;
 
   useEffect(() => {
-    if (!user || successProfileEdit || dpupdateSuccess || coverupdateSuccess) {
-      window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
+    if ( successProfileEdit || dpupdateSuccess || coverupdateSuccess) {      
       dispatch({ type: PROFILE_DP_UPDATE_RESET });
       dispatch({ type: PROFILE_UPDATE_RESET });
       dispatch({ type: PROFILE_COVER_UPDATE_RESET });
       dispatch(getProfileInfoUser(username));
     }
-    window.scrollTo(0, 0);
+    if(!user){
+      dispatch(getProfileInfoUser(username));
+    }
   }, [
-    dispatch,
-    username,
-    user,
+    dispatch,      
     successProfileEdit,
     dpupdateSuccess,
     coverupdateSuccess,

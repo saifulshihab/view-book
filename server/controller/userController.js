@@ -1,8 +1,8 @@
-import passport from 'passport';
-import User from '../models/users.js';
-import asyncHandler from 'express-async-handler';
-import { getToken } from '../authenticate.js';
-import _ from 'lodash';
+import passport from "passport";
+import User from "../models/users.js";
+import asyncHandler from "express-async-handler";
+import { getToken } from "../authenticate.js";
+import _ from "lodash";
 
 const userRegisterController = (req, res) => {
   User.register(
@@ -11,7 +11,7 @@ const userRegisterController = (req, res) => {
     (err, user) => {
       if (err) {
         res.statusCode = 500;
-        res.setHeader('Content-Type', 'application/json');
+        res.setHeader("Content-Type", "application/json");
         res.json({ err: err });
       } else {
         if (req.body.fullname) user.full_name = req.body.fullname;
@@ -20,16 +20,16 @@ const userRegisterController = (req, res) => {
         user.save((err, user) => {
           if (err) {
             res.statusCode = 500;
-            res.setHeader('Content-Type', 'application/json');
+            res.setHeader("Content-Type", "application/json");
             res.json({ err: err });
             return;
           }
-          passport.authenticate('local')(req, res, () => {
+          passport.authenticate("local")(req, res, () => {
             res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
+            res.setHeader("Content-Type", "application/json");
             res.json({
               success: true,
-              status: 'Registration Successfull!',
+              status: "Registration Successfull!",
               /* user: user, */
             });
           });
@@ -40,20 +40,20 @@ const userRegisterController = (req, res) => {
 };
 
 const userLoginController = asyncHandler(async (req, res) => {
-  await passport.authenticate('local', (error, user, info) => {
+  await passport.authenticate("local", (error, user, info) => {
     if (error) throw error;
 
     if (!user) {
       res.status(401);
-      res.json({ success: false, status: 'Login Unsuccessful!', error: info });
+      res.json({ success: false, status: "Login Unsuccessful!", error: info });
     }
     req.logIn(user, (error) => {
       if (error) {
         res.status(401);
         res.json({
           success: false,
-          status: 'Login Unsuccessful!',
-          error: 'Could not log in user!',
+          status: "Login Unsuccessful!",
+          error: "Could not log in user!",
         });
       }
       const token = getToken({ _id: req.user._id });
@@ -68,13 +68,15 @@ const userLoginController = asyncHandler(async (req, res) => {
 });
 
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findOne({ username: req.params.username });
+  const user = await User.findOne({ username: req.params.username })
+    .populate("following")
+    .populate("followers");
   if (user) {
     res.status(200);
     res.json(user);
   } else {
     res.status(404);
-    throw new Error('User not Found!');
+    throw new Error("User not Found!");
   }
 });
 
@@ -92,18 +94,18 @@ const userProfileUpdate = asyncHandler(async (req, res) => {
         res.status(200);
         res.json({
           success: true,
-          status: 'Prfoile is Updated!',
+          status: "Prfoile is Updated!",
         });
       } else {
         throw new Error();
       }
     } else {
       res.status(400);
-      throw new Error('You are not authorized to edit this!');
+      throw new Error("You are not authorized to edit this!");
     }
   } else {
     res.status(404);
-    throw new Error('User Not Found!');
+    throw new Error("User Not Found!");
   }
 });
 
@@ -116,7 +118,7 @@ const updateUserCover = asyncHandler(async (req, res) => {
     res.status(201).json(updatedUser);
   } else {
     res.status(404);
-    throw new Error('User not Found!');
+    throw new Error("User not Found!");
   }
 });
 
@@ -129,7 +131,7 @@ const updateUserDp = asyncHandler(async (req, res) => {
     res.status(201).json(updatedUser);
   } else {
     res.status(404);
-    throw new Error('User not Found!');
+    throw new Error("User not Found!");
   }
 });
 
@@ -140,7 +142,7 @@ const getUserList = asyncHandler(async (req, res) => {
     res.json(users);
   } else {
     res.status(404);
-    throw new Error('User not Found!');
+    throw new Error("User not Found!");
   }
 });
 
@@ -151,7 +153,7 @@ const followOthers = asyncHandler(async (req, res) => {
   if (user) {
     if (reqUser._id.equals(user._id)) {
       res.status(404);
-      throw new Error('You can not follow yourself!');
+      throw new Error("You can not follow yourself!");
     } else {
       let follow = false;
       user.followers.map((x) => {
@@ -162,7 +164,7 @@ const followOthers = asyncHandler(async (req, res) => {
 
       if (follow === true) {
         res.status(404);
-        throw new Error('You are already following this person!');
+        throw new Error("You are already following this person!");
       } else {
         reqUser.following.push({
           userId: user._id,
@@ -189,7 +191,7 @@ const followOthers = asyncHandler(async (req, res) => {
     }
   } else {
     res.status(404);
-    throw new Error('User not Found!');
+    throw new Error("User not Found!");
   }
 });
 
@@ -216,7 +218,7 @@ const unfollowOthers = asyncHandler(async (req, res) => {
     res.json(reqUser);
   } else {
     res.status(404);
-    throw new Error('User not Found!');
+    throw new Error("User not Found!");
   }
 });
 

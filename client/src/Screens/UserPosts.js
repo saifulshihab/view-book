@@ -25,7 +25,7 @@ const UserPosts = ({ userId }) => {
       ) : error ? (
         <Alert message={error} type="error" showIcon />
       ) : (
-        posts && posts.map((post) => <Post post={post} />)
+        posts && posts.map((post) => <Post key={post._id} post={post} />)
       )}
     </div>
   );

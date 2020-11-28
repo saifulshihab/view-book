@@ -68,6 +68,7 @@ body {
   padding: 5px;
   border-radius: 40px;
   background-color: white;
+  margin-top: -10px;
   box-shadow: 1px 2px 2px #ddd;
 }
 .profile__btn img {
@@ -223,14 +224,20 @@ body {
   color: #737373 !important;
   margin-top: -10px !important;
 }
+.chats_wrap,
 .whotofollow_wrap {
-  height: 40vh;
+  height: 40%;
+  margin-bottom: 10px;
+}
+.chats_wrap{
+  margin-top: 10px;
 }
 .chats_wrap,
 .whotofollow_wrap {
   background-color: white;
   border-radius: 10px;
   padding: 10px;
+  overflow: hidden;
   box-shadow: 1px 1px 2px #ddd;
 }
 .chats_wrap h2,
@@ -243,7 +250,7 @@ body {
   padding: 0px !important;
 }
 .whotofollow_body {
-  height: 30vh;
+  height: 65%;
   overflow: hidden;
 }
 .following_list_wrapper {

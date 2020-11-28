@@ -25,7 +25,7 @@ const PublicPosts = () => {
       ) : error ? (
         <Alert type="error" message={error} showIcon />
       ) : (
-        posts && posts.map((post) => <Post post={post} />)
+        posts && posts.map((post) => <Post key={post._id} post={post} />)
       )}
     </>
   );

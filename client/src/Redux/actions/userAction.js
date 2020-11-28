@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 // import { baseURL } from '../../shared/baseURL';
 import {
   LOGIN_FAILED,
@@ -33,7 +33,7 @@ import {
   UNFOLLOW_OTHERS_REQUEST,
   UNFOLLOW_OTHERS_FAILED,
   UNFOLLOW_OTHERS_SUCCESS,
-} from '../ActionTypes';
+} from "../ActionTypes";
 
 export const loginUser = (creds) => async (dispatch) => {
   try {
@@ -43,17 +43,17 @@ export const loginUser = (creds) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
 
-    const { data } = await axios.post('/users/login', creds, config);
+    const { data } = await axios.post("/users/login", creds, config);
 
     dispatch({
       type: LOGIN_SUCCESS,
       payload: data,
     });
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: LOGIN_FAILED,
@@ -71,7 +71,7 @@ export const logoutUser = () => async (dispatch) => {
       type: LOGOUT_REQUEST,
     });
 
-    localStorage.removeItem('userInfo');
+    localStorage.removeItem("userInfo");
 
     dispatch({
       type: LOGOUT_SUCCESS,
@@ -95,11 +95,11 @@ export const signupUser = (values) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
 
-    await axios.post('/users/signup', values, config);
+    await axios.post("/users/signup", values, config);
 
     dispatch({
       type: SIGNUP_SUCCESS,
@@ -164,7 +164,7 @@ export const getProfileInfoPublic = (username) => async (
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -194,7 +194,7 @@ export const profileUpdate = (values) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -227,7 +227,7 @@ export const updateProfileDp = (dp) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -260,7 +260,7 @@ export const updateProfileCover = (cover) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -331,7 +331,7 @@ export const followOthers = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.post(`users/${id}/follow`, config);
+    await axios.put(`users/${id}/follow`, {}, config);
 
     dispatch({
       type: FOLLOW_OTHERS_SUCCESS,
@@ -364,7 +364,7 @@ export const unfollowOthers = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`users/${id}/unfollow`, config);
+    await axios.put(`users/${id}/unfollow`, {}, config);
 
     dispatch({
       type: UNFOLLOW_OTHERS_SUCCESS,

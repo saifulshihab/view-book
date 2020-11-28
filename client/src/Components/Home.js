@@ -1,28 +1,28 @@
-import React, { useEffect } from 'react';
-import { Switch, Route, withRouter, Link, Redirect } from 'react-router-dom';
-import { Row, Col, Menu, List, Button, Alert } from 'antd';
+import React, { useEffect } from "react";
+import { Switch, Route, withRouter, Link, Redirect } from "react-router-dom";
+import { Row, Col, Menu, List, Button, Alert } from "antd";
 import {
   MessageOutlined,
   HomeOutlined,
   LogoutOutlined,
   ToolOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import Profile from './Profile';
-import Settings from './Settings';
-import NewsFeed from './NewsFeed';
-import { useDispatch, useSelector } from 'react-redux';
-import Header from './Header';
-import { logoutUser } from '../Redux/actions/userAction';
-import { getProfileInfoUser } from '../Redux/actions/userAction';
-import UserProfileVisitScreen from '../Screens/UserProfileVisitScreen';
-import PostDetailsScreen from '../Screens/PostDetailsScreen';
-import ChatListScreen from '../Screens/ChatListScreen';
-import WhoToFollowScreen from '../Screens/WhoToFollowList';
-import FollowingScreen from '../Screens/FollowingScreen';
-import FollowersScreen from '../Screens/FollowersScreen';
-import Loader from './Loader';
-import UsersListScreen from '../Screens/UsersListScreen';
+import Profile from "./Profile";
+import Settings from "./Settings";
+import NewsFeed from "./NewsFeed";
+import { useDispatch, useSelector } from "react-redux";
+import Header from "./Header";
+import { logoutUser } from "../Redux/actions/userAction";
+import { getProfileInfoUser } from "../Redux/actions/userAction";
+import UserProfileVisitScreen from "../Screens/UserProfileVisitScreen";
+import PostDetailsScreen from "../Screens/PostDetailsScreen";
+import ChatListScreen from "../Screens/ChatListScreen";
+import WhoToFollowScreen from "../Screens/WhoToFollowList";
+import FollowingScreen from "../Screens/FollowingScreen";
+import FollowersScreen from "../Screens/FollowersScreen";
+import Loader from "./Loader";
+import UsersListScreen from "../Screens/UsersListScreen";
 
 function Home() {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ function Home() {
         ) : (
           <Redirect
             to={{
-              pathname: '/login',
+              pathname: "/login",
               state: { from: props.location },
             }}
           />
@@ -68,7 +68,7 @@ function Home() {
         <Row className="home_body">
           <Col span={7}>
             <div className="left_sidebar">
-              <Menu defaultSelectedKeys={['1']} mode="inline">
+              <Menu defaultSelectedKeys={["1"]} mode="inline">
                 <Menu.Item key="1" icon={<HomeOutlined />}>
                   <Link to="/newsfeed">Home</Link>
                 </Menu.Item>
@@ -122,34 +122,26 @@ function Home() {
           </Col>
           <Col span={7}>
             <div className="right_sidebar">
-              <List itemLayout="vertical">
-                <List.Item>
-                  <div className="profile__btn">
-                    {user.dp ? (
-                      <img src={user.dp} alt={user.full_name} />
-                    ) : (
-                      <img src="/" alt={user.username} />
-                    )}
-                    <div className="fullname">
-                      <Link to="/profile">
-                        <Button type="link">
-                          {user.full_name && user.full_name}
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </List.Item>
-                <List.Item>
-                  <div className="chats_wrap">
-                    <ChatListScreen />
-                  </div>
-                </List.Item>
-                <List.Item>
-                  <div className="whotofollow_wrap">
-                    <WhoToFollowScreen />
-                  </div>
-                </List.Item>
-              </List>
+              <div className="profile__btn">
+                {user.dp ? (
+                  <img src={user.dp} alt={user.full_name} />
+                ) : (
+                  <img src="/" alt={user.username} />
+                )}
+                <div className="fullname">
+                  <Link to="/profile">
+                    <Button type="link">
+                      {user.full_name && user.full_name}
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              <div className="chats_wrap">
+                <ChatListScreen />
+              </div>
+              <div className="whotofollow_wrap">
+                <WhoToFollowScreen />
+              </div>
             </div>
           </Col>
         </Row>
