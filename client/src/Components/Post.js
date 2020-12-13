@@ -79,8 +79,7 @@ const Post = ({ post }) => {
       dispatch(detailsPost(post && post._id));
       setModalOpen(false);
     } else {
-      if (!post.caption || likeSuccess || unlikeSuccess) {
-        window.scrollTo(0, 0);
+      if (!post.caption || likeSuccess || unlikeSuccess) {        
         dispatch(detailsPost(post && post._id));
       } else {
         setCaption(post.caption);
@@ -143,7 +142,6 @@ const Post = ({ post }) => {
       <>
         <Card
           style={{
-            borderRadius: "10px",
             width: "100%",
             marginBottom: "10px",
             boxShadow: "rgb(191 191 191) 0px 1px 1px",

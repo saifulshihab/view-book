@@ -109,11 +109,13 @@ const CommentSection = ({ post }) => {
           placeholder="Write a comment..."
           onChange={(e) => setComment(e.target.value)}
         />
-        <i
-          className="fa fa-paper-plane"
-          aria-hidden="true"
-          onClick={() => submitCommentHandler(post && post._id)}
-        ></i>
+        <div className="sendIcon">
+          <i
+            className="fa fa-paper-plane"
+            aria-hidden="true"
+            onClick={() => submitCommentHandler(post && post._id)}
+          ></i>
+        </div>
       </div>
       {commentsLoading && <Loader ind />}
       {commentsError && <Alert type="info" message={commentsError} showIcon />}

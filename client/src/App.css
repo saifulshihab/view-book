@@ -27,6 +27,7 @@ body {
 .left_sidebar {
   left: 14.2%;
   height: 100vh;
+  background: #ffffff;
   float: right;
   width: 15%;
   position: fixed;
@@ -226,10 +227,10 @@ body {
 }
 .chats_wrap,
 .whotofollow_wrap {
-  height: 40%;
+  height: 44%;
   margin-bottom: 10px;
 }
-.chats_wrap{
+.chats_wrap {
   margin-top: 10px;
 }
 .chats_wrap,
@@ -248,9 +249,10 @@ body {
 .chats_wrap .ant-list-item,
 .whotofollow_wrap .ant-list-item {
   padding: 0px !important;
+  margin-bottom: 5px !important;
 }
 .whotofollow_body {
-  height: 65%;
+  height: 80%;
   overflow: hidden;
 }
 .following_list_wrapper {

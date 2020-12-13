@@ -66,7 +66,6 @@ const PostBox = () => {
       bordered={true}
       style={{
         width: "100%",
-        borderRadius: "10px",
         marginBottom: "10px",
         boxShadow: "rgb(191 191 191) 0px 1px 1px",
       }}

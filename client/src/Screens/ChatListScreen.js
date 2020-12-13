@@ -1,18 +1,18 @@
-import React from 'react';
-import { List, Avatar } from 'antd';
+import React from "react";
+import { List, Avatar } from "antd";
 
 const data = [
   {
-    title: 'Brad Traversy',
+    title: "Brad Traversy",
   },
   {
-    title: 'Fireship.io',
+    title: "Fireship.io",
   },
   {
-    title: 'Ben Awad',
+    title: "Ben Awad",
   },
   {
-    title: 'Maximaz Shwarznagger',
+    title: "Maximaz Shwarznagger",
   },
 ];
 
