@@ -40,6 +40,7 @@ import {
 } from "../Redux/ActionTypes";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
+import PostBox from "./PostBox";
 
 const { Option } = Select;
 
@@ -84,21 +85,16 @@ function Profile({ username }) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if ( successProfileEdit || dpupdateSuccess || coverupdateSuccess) {      
+    if (successProfileEdit || dpupdateSuccess || coverupdateSuccess) {
       dispatch({ type: PROFILE_DP_UPDATE_RESET });
       dispatch({ type: PROFILE_UPDATE_RESET });
       dispatch({ type: PROFILE_COVER_UPDATE_RESET });
       dispatch(getProfileInfoUser(username));
     }
-    if(!user){
+    if (!user) {
       dispatch(getProfileInfoUser(username));
     }
-  }, [
-    dispatch,      
-    successProfileEdit,
-    dpupdateSuccess,
-    coverupdateSuccess,
-  ]);
+  }, [dispatch, successProfileEdit, dpupdateSuccess, coverupdateSuccess]);
 
   const profileUpdateHandler = (values) => {
     dispatch(
@@ -224,7 +220,7 @@ function Profile({ username }) {
                       <ul>
                         <li>
                           {user.education &&
-                             user.education.map((el) => (
+                            user.education.map((el) => (
                               <div key={el._id}>
                                 <i class="fas fa-graduation-cap"></i>
                                 <span>{el.institute}</span>
@@ -317,6 +313,9 @@ function Profile({ username }) {
                   <Alert message={errorProfileEdit} type="error" showIcon />
                 )}
               </Col>
+            </Row>
+            <Row>
+              <PostBox />
             </Row>
             <Row>
               <Col span={24}>
@@ -539,9 +538,9 @@ function Profile({ username }) {
             {user.education &&
               user.education.map((d) => (
                 <>
-                  <h4>{d.institute}</h4>  
-                  <p>{d.desc}</p>  
-                  <p style={{fontStyle: "italic"}}>
+                  <h4>{d.institute}</h4>
+                  <p>{d.desc}</p>
+                  <p style={{ fontStyle: "italic" }}>
                     {d.from} - {d.to ? d.to : d.present && "Present"}
                   </p>
                 </>
@@ -555,7 +554,7 @@ function Profile({ username }) {
             {user.social &&
               user.social.map((d) => (
                 <>
-                  <h4>{d.platform}</h4>           
+                  <h4>{d.platform}</h4>
                   <p>{d.link}</p>
                 </>
               ))}
