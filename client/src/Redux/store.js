@@ -1,9 +1,9 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import {
   AuthReducer,
   profileCoverUpdateReducer,
   SignupReducer,
-} from "../Redux/reducer/userReducer";
+} from '../Redux/reducer/userReducer';
 import {
   profileUpdateReducer,
   profileInfoUserReducer,
@@ -12,9 +12,9 @@ import {
   userListReducer,
   followOtherReducer,
   unfollowOtherReducer,
-} from "../Redux/reducer/userReducer";
-import thunk from "redux-thunk";
-import { composeWithDevTools } from "redux-devtools-extension";
+} from '../Redux/reducer/userReducer';
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   getUserPostReducer,
   getPublicPostReducer,
@@ -28,7 +28,8 @@ import {
   commentPostReducer,
   commentDeleteReducer,
   commentEditReducer,
-} from "../Redux/reducer/postReducers";
+} from '../Redux/reducer/postReducers';
+import jwt from 'jsonwebtoken';
 
 const reducer = combineReducers({
   auth: AuthReducer,
@@ -57,9 +58,22 @@ const reducer = combineReducers({
 
 const initialState = {
   auth: {
-    isAuthenticated: localStorage.getItem("userInfo") ? true : false,
-    userInfo: localStorage.getItem("userInfo")
-      ? JSON.parse(localStorage.getItem("userInfo"))
+    isAuthenticated: localStorage.getItem('userInfo')
+      ? jwt.verify(
+          JSON.parse(localStorage.getItem('userInfo')).token,
+          'vfewroih141o45ihgfboewrgv9835',
+          (err, dec) => {
+            if (err) {
+              localStorage.removeItem('userInfo');
+              return false;
+            } else {
+              return true;
+            }
+          }
+        )
+      : false,
+    userInfo: localStorage.getItem('userInfo')
+      ? JSON.parse(localStorage.getItem('userInfo'))
       : {},
   },
 };
