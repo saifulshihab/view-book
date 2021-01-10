@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 import {
   LIKE_POST_SUCCESS,
@@ -37,7 +37,7 @@ import {
   COMMENT_EDIT_REQUEST,
   COMMENT_EDIT_SUCCESS,
   COMMENT_EDIT_FAILED,
-} from "../ActionTypes";
+} from '../ActionTypes';
 
 // Fetch public Posts (GET all) (Public)
 export const getPublicPostsAction = () => async (dispatch, getState) => {
@@ -86,7 +86,7 @@ export const getUserPostsAction = (userId) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -119,11 +119,11 @@ export const postSubmitAction = (data) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    await axios.post("/posts", data, config);
+    await axios.post('/posts', data, config);
 
     dispatch({
       type: POST_SUBMIT_SUCCESS,
@@ -327,7 +327,7 @@ export const commentOnPost = (id, comment) => async (dispatch, getState) => {
     const config = {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     };
     await axios.post(`/posts/${id}/comment`, { comment }, config);

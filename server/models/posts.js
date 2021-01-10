@@ -1,27 +1,29 @@
 import mongoose from 'mongoose';
 
-const LikeSchema = mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    }, 
-  } 
-);
+const LikeSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+});
 
-const PostSchema = mongoose.Schema(
+const ImageSchema = new mongoose.Schema({
+  image: {
+    type: String,
+  },
+});
+
+const PostSchema = new mongoose.Schema(
   {
     caption: {
-      type: String
-    },
-    image: {
       type: String,
     },
+    images: [ImageSchema],
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    like: [LikeSchema]    
+    like: [LikeSchema],
   },
   {
     timestamps: true,

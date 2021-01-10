@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Input, Row, Form, Upload } from "antd";
-import { FileImageOutlined } from "@ant-design/icons";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { postSubmitAction } from "../Redux/actions/postAction";
-import { getPublicPostsAction } from "../Redux/actions/postAction";
-import Loader from "./Loader";
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Col, Input, Row, Form, Upload } from 'antd';
+import { FileImageOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { postSubmitAction } from '../Redux/actions/postAction';
+import { getPublicPostsAction } from '../Redux/actions/postAction';
+import Loader from './Loader';
 
 const PostBox = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const PostBox = () => {
   const { success } = postSubmit;
 
   const [uploading, setUploading] = useState(false);
-  const [postImage, setPostImage] = useState("");
+  const [postImage, setPostImage] = useState([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -26,7 +26,7 @@ const PostBox = () => {
     dispatch(
       postSubmitAction({
         caption: values.caption,
-        image: postImage,
+        images: postImage,
       })
     );
     form.resetFields();
@@ -35,18 +35,20 @@ const PostBox = () => {
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append('images', file);
     setUploading(true);
     try {
       const config = {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       };
 
-      const { data } = await axios.post("/upload", formData, config);
+      const { data } = await axios.post('/upload', formData, config);
 
-      setPostImage(data);
+      postImage.push({
+        image: data,
+      }); 
       setUploading(false);
     } catch (error) {
       console.error(error);
@@ -65,37 +67,62 @@ const PostBox = () => {
     <Card
       bordered={true}
       style={{
-        width: "100%",
-        marginBottom: "10px",
-        boxShadow: "rgb(191 191 191) 0px 1px 1px",
+        width: '100%',
+        marginBottom: '10px',
+        boxShadow: 'rgb(191 191 191) 0px 1px 1px',
       }}
     >
       <Row>
         <Col span={24}>
-          <Form form={form} style={{ width: "100%" }} onFinish={submitHandler}>
-            <Form.Item name="caption">
-              <Input size="large" placeholder="Whats on your mind?" />
+          <Form form={form} style={{ width: '100%' }} onFinish={submitHandler}>
+            <Form.Item name='caption'>
+              <Input size='large' placeholder='Whats on your mind?' />
             </Form.Item>
-            <div className="postactions">
-              <div className="postactions_btns">
+            <div className='postactions'>
+              <div className='postactions_btns'>
                 <Form.Item
                   style={{ marginBottom: 0 }}
-                  name="image"
-                  valuePropName="fileList"
+                  valuePropName='fileList'
                   getValueFromEvent={normFile}
                   onChange={uploadFileHandler}
                 >
                   <Upload>
                     <Button
-                      listtype="picture"
+                      listtype='picture'
+                      icon={<FileImageOutlined />}
+                    ></Button>
+                  </Upload>
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: 0 }}
+                  valuePropName='fileList'
+                  getValueFromEvent={normFile}
+                  onChange={uploadFileHandler}
+                >
+                  <Upload>
+                    <Button
+                      listtype='picture'
+                      icon={<FileImageOutlined />}
+                    ></Button>
+                  </Upload>
+                </Form.Item>
+                <Form.Item
+                  style={{ marginBottom: 0 }}
+                  valuePropName='fileList'
+                  getValueFromEvent={normFile}
+                  onChange={uploadFileHandler}
+                >
+                  <Upload>
+                    <Button
+                      listtype='picture'
                       icon={<FileImageOutlined />}
                     ></Button>
                   </Upload>
                 </Form.Item>
                 {uploading && <Loader small ind />}
               </div>
-              <div className="post_btn">
-                <Button htmlType="submit" type="primary">
+              <div className='post_btn'>
+                <Button htmlType='submit' type='primary'>
                   POST
                 </Button>
               </div>
